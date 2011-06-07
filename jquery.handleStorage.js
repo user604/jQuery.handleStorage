@@ -165,9 +165,13 @@
   /* create array of storage items (decrypting if specified) */
   var getStorage = function(options) {
    var ret = {}, x;
-   $.each($('#'+options.form+' :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea'), function(k, v){
-    if ((validateString(v.name)!==false)&&(validateString(getItem(options.storage, v.name))!==false)){
-     ret[v.name] = ((options.aes)&&(options.key)&&(x!==false)) ? GibberishAES.dec(getItem(options.storage, v.name), options.uuid) : getItem(options.storage, v.name);
+   $.each($('#'+options.form+' :text, :password, :file, input:hidden,'+
+            'input:checkbox:checked, input:radio:checked, textarea'), function(k, v){
+    if ((validateString(v.name)!==false)&&(validateString(getItem(options.storage,
+                                                                  v.name))!==false)){
+     ret[v.name] = ((options.aes)&&(options.key)&&(x!==false)) ?
+      GibberishAES.dec(getItem(options.storage, v.name), options.uuid) :
+      getItem(options.storage, v.name);
     }
    });
    return ret;
@@ -176,7 +180,8 @@
   /* if storage items exist attempt to populate form */
   var setForm = function(options, arg){
    $.each(arg, function(a, b){
-    if (($('#'+options.form+' input[name='+a+']').attr('name')===a)&&(validateString(b)!==false)){
+    if (($('#'+options.form+' input[name='+a+']').attr('name')===a)&&
+        (validateString(b)!==false)){
      $('#'+options.form+' input[name='+a+']').val(b);
     }
    });
@@ -184,16 +189,20 @@
 
   /* save contents of form to specified storage mechanism (encrypting if specified) */
   var saveForm = function(options) {
-   $.each($('#'+options.form+' :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea'), function(k, v){
+   $.each($('#'+options.form+' :text, :password, :file, input:hidden,'+
+            'input:checkbox:checked, input:radio:checked, textarea'), function(k, v){
     if ((validateString(v.value)!==false)&&(validateString(v.name)!==false)){
-     ((options.aes)&&(options.key)) ? setItem(options.storage, v.name, GibberishAES.enc(v.value, options.uuid)) : setItem(options.storage, v.name, v.value);
+     ((options.aes)&&(options.key)) ?
+      setItem(options.storage, v.name, GibberishAES.enc(v.value, options.uuid)) :
+      setItem(options.storage, v.name, v.value);
     }
    });
   }
 
   /* validate string integrity */
   var validateString = function(string){
-   return ((string===false)||(string.length===0)||(!string)||(string===null)||(string==='')||(typeof string==='undefined')) ? false : true;
+   return ((string===false)||(string.length===0)||(!string)||(string===null)||
+           (string==='')||(typeof string==='undefined')) ? false : true;
   }
 
   /* validate localStorage/localSession functionality (a better way to do this?) */
@@ -209,14 +218,16 @@
   var validateOptions = function(opts){
    var ret = true;
    if (opts.aes){
-    if (typeof GibberishAES.enc!=='function'){
-     console.log('AES use specified but required libraries not available. Please include the Gibberish-AES libs...');
+    if (!$.isFunction(GibberishAES.enc)){
+     console.log('AES use specified but required libraries not available.'+
+                 'Please include the Gibberish-AES libs...');
      ret = false;
     }
    }
    if (opts.storage==='cookie'){
-    if (typeof $.cookie!=='function'){
-     console.log('Cookie use specified but required libraries not available. Please include the jQuery cookie plugin...');
+    if (!$.isFunction($.cookie)){
+     console.log('Cookie use specified but required libraries not available.'+
+                 'Please include the jQuery cookie plugin...');
      ret = false;
     }
    }
@@ -235,13 +246,15 @@
      uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r & 0xf];
     }
    }
-   return (len!==null) ? uuid.join('').replace(/-/g, '').split('',len).join('') : uuid.join('');
+   return (len!==null) ?
+    uuid.join('').replace(/-/g, '').split('',len).join('') : uuid.join('');
   }
 
   /* generate or use existing uuid key */
   var handleKey = function(options) {
    if (options.aes) {
-    options.key = (getItem(options.storage, 'uuid')) ? getItem(options.storage, 'uuid') : $.genUUID(null);
+    options.key = (getItem(options.storage, 'uuid')) ?
+     getItem(options.storage, 'uuid') : genUUID(null);
     setItem(options.storage, 'uuid', options.key);
    }
   }
@@ -249,7 +262,7 @@
   /* robot, do something */
   if (methods[method]){
    return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-  } else if (typeof method==='object' || ! method){
+  } else if ((typeof method==='object')||(!method)){
    return methods.init.apply(this, arguments);
   } else {
    $.error('Method '+method+' does not exist on '+opts.name);
