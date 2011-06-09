@@ -188,8 +188,7 @@
 
   /* save contents of form to specified storage mechanism (encrypting if specified) */
   var saveForm = function(options) {
-   $.each($('#'+options.form+' :text, :password, :file, input:hidden,'+
-            'input:checkbox:checked, input:radio:checked, textarea'), function(k, v){
+   $.each($('#'+options.form+' :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea, input[type="email"], input[type="url"], input[type="number"], input[type="range"], input[type="date"], input[type="month"], input[type="week"], input[type="time"], input[type="datetime"], input[type="datetime-local"], input[type="search"], input[type="color"]'), function(k, v){
     if ((validateString(v.value)!==false)&&(validateString(v.name)!==false)){
      ((options.aes)&&(options.key)) ?
       setItem(options.storage, v.name, GibberishAES.enc(v.value, options.uuid)) :
