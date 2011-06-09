@@ -165,7 +165,7 @@
   /* create array of storage items (decrypting if specified) */
   var getStorage = function(options) {
    var ret = {}, x;
-   $.each($('#'+options.form+' :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea input[type="hidden"]'), function(k, v){
+   $.each($('#'+options.form+' :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea, input[type="email"], input[type="url"], input[type="number"], input[type="range"], input[type="date"], input[type="month"], input[type="week"], input[type="time"], input[type="datetime"], input[type="datetime-local"], input[type="search"], input[type="color"]'), function(k, v){
     if ((validateString(v.name)!==false)&&(validateString(getItem(options.storage,
                                                                   v.name))!==false)){
      ret[v.name] = ((options.aes)&&(options.key)&&(x!==false)) ?
