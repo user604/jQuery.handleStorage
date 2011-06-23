@@ -59,6 +59,6 @@ for older browsers. Optional AES encryption support.
  Author: Jason Gerfen
  Email: jason.gerfen@gmail.com
  Copyright: Jason Gerfen
- Last updated: 05.03.2011
+ Last updated: 06.23.2011
 
  License: GPL
