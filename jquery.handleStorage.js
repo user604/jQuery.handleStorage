@@ -17,6 +17,7 @@
  * - Gibberish-AES libraries (optional - https://github.com/mdp/gibberish-aes)
  *
  * OPTIONS:
+ * - appID:   Unique identifier used as storage object key
  * - storage: HTML5 localStorage, sessionStorage and cookies supported
  * - aes:     Use AES encryption for local storage
  * - uuid:    Random RFC-4122 string used as AES password
@@ -30,41 +31,49 @@
  */
 
 (function($){
- /* jQuery.handleStorage plug-in */
+
+ /**
+  * @function jQuery.handleStorage
+  * @abstract Plug-in used to assist in client storage items
+  * @param method string Method to employ for form ID DOM object
+  *                      init (transparent getting and setting of
+  *                      form elements)
+  * @param options object Options object for specific operations
+  *                       appID, storage, aes
+  */
  $.fn.handleStorage = function(method) {
 
-  /* define our methods */
+  /**
+   * @object defaults
+   * @abstract Default set of options for plug-in
+   */
+  var defaults = {
+   appID:   'jQuery.handleStorage',  // Application ID, used as index
+   storage: 'localStorage',          // Storage type localStorage || sessionStorage || cookie (cookie storage requires jQuery cookie plugin)
+   aes:     false,                   // Use AES encryption? (true or false)
+   uuid:    '',                      // Random RFC-4122 string used as AES password
+   form:    $(this).attr('id'),      // Place holder for form ID
+   data:    {}                       // Place holder for existing form storage objects
+  };
+
+  /**
+   * @object methods
+   * @abstract Plug-in methods
+   */
   var methods = {
 
-   /* primary method of usage */
+   /**
+    * @function init
+    * @abstract Default plug-in method. Provides transparent client storage
+    *           of form data using HTML5 client storage or cookies with
+    *           optional AES encryption support
+    */
    init: function(options){
-
-    /* default options */
-    var defaults = {
-     appID:   'jQuery.handleStorage',  // Application ID, used as index
-     storage: 'localStorage',          // Storage type localStorage || sessionStorage || cookie (cookie storage requires jQuery cookie plugin)
-     aes:     false,                   // Use AES encryption? (true or false)
-     uuid:    '',                      // Random RFC-4122 string used as AES password
-     form:    $(this).attr('id'),      // Place holder for form ID
-     data:    {}                       // Place holder for existing form storage objects
-    };
-
-    /* merge defined with defaults */
     var opts = $.extend({}, defaults, options);
-
-    /* validate options before proceeding */
     if (validateOptions(opts)){
-
-     /* handle key setting/getting */
      handleKey(opts);
-
-     /* existing object? */
      opts.data[opts.appID] = (existing(opts)) ? existing(opts) : {};
-
-     /* try to get existing items matching dom object */
      var orig = getStorage(opts);
-
-     /* if they exist populate dom object else wait for submit event and save */
      if ((typeof orig==='object')&&(sizeChk(orig)>0)){
       setForm(opts, orig);
      }
@@ -78,7 +87,10 @@
    }
   };
 
-  /* associative object size */
+  /**
+   * @function sizeChk
+   * @abstract Performs a check on object sizes
+   */
   var sizeChk = function(obj) {
    var n = 0;
    $.each(obj, function(k, v){
@@ -87,7 +99,11 @@
    return n;
   }
 
-  /* use storage options to save form data */
+  /**
+   * @function setItem
+   * @abstract Proxy function for setting data with specified client storage
+   *           option
+   */
   var setItem = function(type, k, v) {
    var x = false;
    type = (validateStorage(type)) ? type : 'cookie';
@@ -108,7 +124,11 @@
    return x;
   }
 
-  /* use storage option to get data */
+  /**
+   * @function getItem
+   * @abstract Proxy function for getting data with specified client storage
+   *           option
+   */
   var getItem = function(type, k) {
    var x = false;
    type = (validateStorage(type)) ? type : 'cookie';
@@ -129,17 +149,26 @@
    return x;
   }
 
-  /* localStorage setter */
+  /**
+   * @function setLocal
+   * @abstract Function used to set localStorage items
+   */
   var setLocal = function(k, v) {
    return (localStorage.setItem(k, v)) ? false : true;
   }
 
-  /* localSession setter */
+  /**
+   * @function setSession
+   * @abstract Function used to set sessionStorage items
+   */
   var setSession = function(k, v) {
    return (sessionStorage.setItem(k, v)) ? false : true;
   }
 
-  /* cookie setter */
+  /**
+   * @function setCookie
+   * @abstract Function used to set cookie items
+   */
   var setCookie = function(k, v) {
    if (typeof $.cookie === 'function') {
     return ($.cookie(k, v, {expires: 7})) ? true : false;
@@ -148,17 +177,26 @@
    }
   }
 
-  /* localStorage getter */
+  /**
+   * @function getLocal
+   * @abstract Function used to get localStorage items
+   */
   var getLocal = function(k) {
    return (localStorage.getItem(k)) ? localStorage.getItem(k) : false;
   }
 
-  /* sessionStorage getter */
+  /**
+   * @function getSession
+   * @abstract Function used to get sessionStorage items
+   */
   var getSession = function(k) {
    return (sessionStorage.getItem(k)) ? sessionStorage.getItem(k) : false;
   }
 
-  /* cookie getter */
+  /**
+   * @function setCookie
+   * @abstract Function used to get cookie items
+   */
   var getCookie = function(name) {
    if (typeof $.cookie === 'function') {
     return ($.cookie(name)) ? $.cookie(name) : false;
@@ -167,13 +205,21 @@
    }
   }
 
-  /* Try to get existing storage object for this form */
+  /**
+   * @function existing
+   * @abstract Function used to return configured storage items
+   *           as JSON object
+   */
   var existing = function(options) {
    return (getItem(options.storage, options.appID)) ?
     JSON.parse(getItem(options.storage, options.appID)) : false;
   }
 
-  /* create array of storage items (decrypting if specified) */
+  /**
+   * @function getStorage
+   * @abstract Function to compare and decrypt if necessary, existing
+   *           storage items to configured form input elements
+   */
   var getStorage = function(options) {
    var ret={}, x;
    if (validateString(options.data[options.appID][options.form])){
@@ -189,7 +235,10 @@
    return ret;
   }
 
-  /* if storage items exist attempt to populate form */
+  /**
+   * @function setForm
+   * @abstract Sets input values within configured form
+   */
   var setForm = function(options, arg){
    $.each(arg, function(a, b){
     if (($('#'+options.form+' input[name='+a+']').attr('name')===a)&&
@@ -199,7 +248,11 @@
    });
   }
 
-  /* save contents of form to specified storage mechanism (encrypting if specified) */
+  /**
+   * @function saveForm
+   * @abstract Saves non-null form elements to configured client storage
+   *           mechanism, encrypting if configured as a nested JSON object
+   */
   var saveForm = function(options) {
    var x={}; x[options.form]={};
    $.each($('#'+options.form+' :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea, input[type="email"], input[type="url"], input[type="number"], input[type="range"], input[type="date"], input[type="month"], input[type="week"], input[type="time"], input[type="datetime"], input[type="datetime-local"], input[type="search"], input[type="color"]'), function(k, v){
@@ -213,7 +266,10 @@
    setItem(options.storage, options.appID, JSON.stringify(options.data[options.appID]));
   }
 
-  /* validate string integrity */
+  /**
+   * @function validateString
+   * @abstract Verifies string integrity
+   */
   var validateString = function(string){
    if (string){
     return ((string===false)||(string.length===0)||(!string)||(string===null)||
@@ -223,7 +279,11 @@
    }
   }
 
-  /* validate localStorage/localSession functionality (a better way to do this?) */
+  /**
+   * @function validateStorage
+   * @abstract Ensures configured storage mechanism is available for the
+   *           browser engine
+   */
   var validateStorage = function(type){
    try {
     return ((type in window)&&(window[type])) ? true : false;
@@ -232,7 +292,10 @@
    }
   }
 
-  /* validate options and send errors to console */
+  /**
+   * @function validateOptions
+   * @abstract Tests configured options vs. available functionality
+   */
   var validateOptions = function(opts){
    var ret = true;
    if (opts.aes){
@@ -252,7 +315,10 @@
    return ret;
   }
 
-  /* generate a uuid (RFC-4122) */
+  /**
+   * @function genUUID
+   * @abstract Generates a valid RFC-4122 UUID
+   */
   var genUUID = function(len){
    var chars = '0123456789abcdef'.split('');
    var uuid = [], rnd = Math.random, r;
@@ -268,7 +334,10 @@
     uuid.join('').replace(/-/g, '').split('',len).join('') : uuid.join('');
   }
 
-  /* generate or use existing uuid key */
+  /**
+   * @function handleKey
+   * @abstract Performs key generation or retrieval
+   */
   var handleKey = function(options) {
    if (options.aes) {
     options.key = (getItem(options.storage, 'uuid')) ?
