@@ -41,10 +41,12 @@
 
     /* default options */
     var defaults = {
-     storage: 'localStorage',     // Storage type localStorage || sessionStorage || cookie (cookie storage requires jQuery cookie plugin)
-     aes:     false,              // Use AES encryption? (true or false)
-     uuid:    '',                 // Random RFC-4122 string used as AES password
-     form:    $(this).attr('id')  // Place holder for form ID
+     appID:   'jQuery.handleStorage',  // Application ID, used as index
+     storage: 'localStorage',          // Storage type localStorage || sessionStorage || cookie (cookie storage requires jQuery cookie plugin)
+     aes:     false,                   // Use AES encryption? (true or false)
+     uuid:    '',                      // Random RFC-4122 string used as AES password
+     form:    $(this).attr('id'),      // Place holder for form ID
+     data:    {}                       // Place holder for existing form storage objects
     };
 
     /* merge defined with defaults */
@@ -55,6 +57,9 @@
 
      /* handle key setting/getting */
      handleKey(opts);
+
+     /* existing object? */
+     opts.data[opts.appID] = (existing(opts)) ? existing(opts) : {};
 
      /* try to get existing items matching dom object */
      var orig = getStorage(opts);
@@ -162,17 +167,25 @@
    }
   }
 
+  /* Try to get existing storage object for this form */
+  var existing = function(options) {
+   return (getItem(options.storage, options.appID)) ?
+    JSON.parse(getItem(options.storage, options.appID)) : false;
+  }
+
   /* create array of storage items (decrypting if specified) */
   var getStorage = function(options) {
-   var ret = {}, x;
-   $.each($('#'+options.form+' :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea, input[type="email"], input[type="url"], input[type="number"], input[type="range"], input[type="date"], input[type="month"], input[type="week"], input[type="time"], input[type="datetime"], input[type="datetime-local"], input[type="search"], input[type="color"]'), function(k, v){
-    if ((validateString(v.name)!==false)&&(validateString(getItem(options.storage,
-                                                                  v.name))!==false)){
-     ret[v.name] = ((options.aes)&&(options.key)&&(x!==false)) ?
-      GibberishAES.dec(getItem(options.storage, v.name), options.uuid) :
-      getItem(options.storage, v.name);
-    }
-   });
+   var ret={}, x;
+   if (validateString(options.data[options.appID][options.form])){
+    $.each($('#'+options.form+' :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea, input[type="email"], input[type="url"], input[type="number"], input[type="range"], input[type="date"], input[type="month"], input[type="week"], input[type="time"], input[type="datetime"], input[type="datetime-local"], input[type="search"], input[type="color"]'), function(k, v){
+     if ((validateString(v.name)!==false)&&
+         (validateString(options.data[options.appID][options.form][v.name])!==false)){
+      ret[v.name] = ((options.aes)&&(options.key)&&(x!==false)) ?
+       GibberishAES.dec(options.data[options.appID][options.form][v.name], options.uuid) :
+       options.data[options.appID][options.form][v.name];
+     }
+    });
+   }
    return ret;
   }
 
@@ -188,19 +201,26 @@
 
   /* save contents of form to specified storage mechanism (encrypting if specified) */
   var saveForm = function(options) {
+   var x={}; x[options.form]={};
    $.each($('#'+options.form+' :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea, input[type="email"], input[type="url"], input[type="number"], input[type="range"], input[type="date"], input[type="month"], input[type="week"], input[type="time"], input[type="datetime"], input[type="datetime-local"], input[type="search"], input[type="color"]'), function(k, v){
     if ((validateString(v.value)!==false)&&(validateString(v.name)!==false)){
-     ((options.aes)&&(options.key)) ?
-      setItem(options.storage, v.name, GibberishAES.enc(v.value, options.uuid)) :
-      setItem(options.storage, v.name, v.value);
+     x[options.form][v.name] = ((options.aes)&&(options.key)) ?
+      GibberishAES.enc(v.value, options.uuid) : v.value;
     }
    });
+   options.data[options.appID] = (sizeChk(options.data[options.appID])>0) ?
+    $.extend({}, options.data[options.appID], x) : x;
+   setItem(options.storage, options.appID, JSON.stringify(options.data[options.appID]));
   }
 
   /* validate string integrity */
   var validateString = function(string){
-   return ((string===false)||(string.length===0)||(!string)||(string===null)||
-           (string==='')||(typeof string==='undefined')) ? false : true;
+   if (string){
+    return ((string===false)||(string.length===0)||(!string)||(string===null)||
+            (string==='')||(typeof string==='undefined')) ? false : true;
+   } else {
+    return false;
+   }
   }
 
   /* validate localStorage/localSession functionality (a better way to do this?) */
@@ -255,6 +275,20 @@
      getItem(options.storage, 'uuid') : genUUID(null);
     setItem(options.storage, 'uuid', options.key);
    }
+  }
+
+  /**
+   * @function __recurse
+   * @abstract Function used help debug objects recursively
+   */
+  var __recurse = function(obj){
+   $.each(obj, function(x,y){
+    if (typeof y==='object'){
+     __recurse(y);
+    } else {
+     console.log(x+' => '+y);
+    }
+   });
   }
 
   /* robot, do something */
