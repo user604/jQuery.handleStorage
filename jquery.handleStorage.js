@@ -241,9 +241,10 @@
    */
   var setForm = function(options, arg){
    $.each(arg, function(a, b){
-    if (($('#'+options.form+' input[name='+a+']').attr('name')===a)&&
+    if (($('#'+options.form+' input[name='+a+']').attr('name')===a)||
+        ($('#'+options.form+' textarea[name='+a+']').attr('name')===a)&&
         (validateString(b)!==false)){
-     $('#'+options.form+' input[name='+a+']').val(b);
+     $('#'+options.form+' input[name='+a+'], textarea[name='+a+']').val(b);
     }
    });
   }
