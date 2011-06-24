@@ -3,207 +3,169 @@
 <head>
  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
  <title>jQuery handleStorage Plugin Demo</title>
+
+ <!-- this stylesheet was ripped from an article on net tuts -->
+ <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+
  <!-- Load the jQuery libraries -->
  <script src="http://code.jquery.com/jquery-1.6.min.js"></script>
+
  <!-- Load the cookie libraries -->
  <script src="https://raw.github.com/carhartl/jquery-cookie/master/jquery.cookie.js"></script>
+
  <!-- Load the Gibberish-AES libraries -->
  <script src="https://raw.github.com/mdp/gibberish-aes/master/src/gibberish-aes.min.js"></script>
+
+ <!-- Load the jQuery handleStorage plugin -->
  <script src="jquery.handleStorage.js"></script>
 </head>
 
 <body>
- <h3><strong>jQuery handleStorage plugin Demo</strong></h3>
- <noscript><h4>Demo will not work because JavaScript is disabled</h4></noscript>
+ <div style="width:70%; word-wrap:break-word">
+  <h2><strong>jQuery handleStorage plug-in demo's</strong></h2>
+  <p style="text-align:center">
+   <blockquote>
+    When working with mobile web page styling I have found the need to use input
+    forms and the keyboard interface associated with that on several mobile devices
+    to be somewhat lacking. This plug-in should help your visitors when dealing
+    with management of form data using HTML5 (or falling back to cookie) localStorage,
+    sessionStorage support. Also supports AES-CBC-256 encryption using the
+    Gibberish-AES encryption library.
+   </blockquote>
+  </p>
 
- <!-- localStorage default unencrypted example -->
- <script>
-  var $j = jQuery.noConflict();
-  $j(document).ready(function(){
-   $j('#myForm1').handleStorage();
-  });
- </script>
- <fieldset>
-  <legend><strong>Save to localStorage</strong></legend>
-  <form id="myForm1" name="myForm1" class="myForm1" method="post" action="">
-   <div>
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" />
-   </div>
-   <div>
-    <label for="name">Address</label>
-    <input type="text" name="address" id="address" />
-   </div>
-   <div>
-    <label for="name">Phone</label>
-    <input type="text" name="phone" id="phone" />
-   </div>
-   <div>
-    <label for="name">Email</label>
-    <input type="text" name="email" id="email" />
-   </div>
-   <input type="submit" id="wtf" name="wtf" value="submit" />
-  </form>
-  <div id="defaultsetdiv"></div>
- </fieldset>
+  <!-- example using default options -->
+  <script>
+   var $j = jQuery.noConflict();
+   $j(document).ready(function() {
+    $j('#default').handleStorage();
+   });
+  </script>
+  <div id="contact-form" class="clearfix">
+   <h3>Example using HTML5 localStorage</h3>
+   <form id="default" name="default" style="defalt" method="post" action="">
+    <label for="name">Name: <span class="required">*</span></label>
+     <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
+    <label for="email">Email Address: <span class="required">*</span></label>
+     <input type="email" id="email" name="email" value="" placeholder="johndoe@example.com" required="required" />
+    <label for="message">Message: <span class="required">*</span></label>
+     <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
+    <span id="loading"></span>
+     <input type="submit" value="Save to localStorage & submit" id="submit-button" />
+     <p id="req-field-desc"></p>
+   </form>
+  </div>
 
+  <!-- example using sessionStorage -->
+  <script>
+   var $j = jQuery.noConflict();
+   $j(document).ready(function() {
+    $j('#sessions').handleStorage({storage:'sessionStorage'});
+   });
+  </script>
+  <div id="contact-form" class="clearfix">
+   <h3>Example using HTML5 sessionStorage</h3>
+   <form id="sessions" name="sessions" style="sessions" method="post" action="">
+    <label for="name">Name: <span class="required">*</span></label>
+     <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
+    <label for="email">Email Address: <span class="required">*</span></label>
+     <input type="email" id="email" name="email" value="" placeholder="johndoe@example.com" required="required" />
+    <label for="message">Message: <span class="required">*</span></label>
+     <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
+    <span id="loading"></span>
+     <input type="submit" value="Save to sessionStorage & submit" id="submit-button" />
+     <p id="req-field-desc"></p>
+   </form>
+  </div>
 
- <!-- sessionStorage default unencrypted example -->
- <script>
-  var $j = jQuery.noConflict();
-  $j(document).ready(function(){
-   $j('#myForm2').handleStorage({storage:'sessionStorage'});
-  });
- </script>
- <fieldset>
-  <legend><strong>Save to sessionStorage</strong></legend>
-  <form id="myForm2" name="myForm2" class="myForm2" method="post" action="">
-   <div>
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" />
-   </div>
-   <div>
-    <label for="name">Address</label>
-    <input type="text" name="address" id="address" />
-   </div>
-   <div>
-    <label for="name">Phone</label>
-    <input type="text" name="phone" id="phone" />
-   </div>
-   <div>
-    <label for="name">Email</label>
-    <input type="text" name="email" id="email" />
-   </div>
-   <input type="submit" id="wtf" name="wtf" value="submit" />
-  </form>
-  <div id="defaultsetdiv"></div>
- </fieldset>
+  <!-- example using cookies -->
+  <script>
+   var $j = jQuery.noConflict();
+   $j(document).ready(function() {
+    $j('#cookies').handleStorage({storage:'cookies'});
+   });
+  </script>
+  <div id="contact-form" class="clearfix">
+   <h3>Example using cookies (for non-HTML5 compliant browsers, auto-fallback)</h3>
+   <form id="cookies" name="cookies" style="cookies" method="post" action="">
+    <label for="name">Name: <span class="required">*</span></label>
+     <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
+    <label for="email">Email Address: <span class="required">*</span></label>
+     <input type="email" id="email" name="email" value="" placeholder="johndoe@example.com" required="required" />
+    <label for="message">Message: <span class="required">*</span></label>
+     <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
+    <span id="loading"></span>
+     <input type="submit" value="Save to cookie & submit" id="submit-button" />
+     <p id="req-field-desc"></p>
+   </form>
+  </div>
 
- <!-- cookie Storage default unencrypted example -->
- <script>
-  var $j = jQuery.noConflict();
-  $j(document).ready(function(){
-   $j('#myForm3').handleStorage({storage:'cookie'});
-  });
- </script>
- <fieldset>
-  <legend><strong>Save to cookies</strong></legend>
-  <form id="myForm3" name="myForm3" class="myForm3" method="post" action="">
-   <div>
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" />
-   </div>
-   <div>
-    <label for="name">Address</label>
-    <input type="text" name="address" id="address" />
-   </div>
-   <div>
-    <label for="name">Phone</label>
-    <input type="text" name="phone" id="phone" />
-   </div>
-   <div>
-    <label for="name">Email</label>
-    <input type="text" name="email" id="email" />
-   </div>
-   <input type="submit" id="wtf" name="wtf" value="submit" />
-  </form>
-  <div id="defaultsetdiv"></div>
- </fieldset>
+  <!-- example using AES encrypted localStorage -->
+  <script>
+   var $j = jQuery.noConflict();
+   $j(document).ready(function() {
+    $j('#default-aes').handleStorage({aes:true});
+   });
+  </script>
+  <div id="contact-form" class="clearfix">
+   <h3>Example using HTML5 localStorage with AES encryption</h3>
+   <form id="default-aes" name="default-aes" style="default-aes" method="post" action="">
+    <label for="name">Name: <span class="required">*</span></label>
+     <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
+    <label for="email">Email Address: <span class="required">*</span></label>
+     <input type="email" id="email" name="email" value="" placeholder="johndoe@example.com" required="required" />
+    <label for="message">Message: <span class="required">*</span></label>
+     <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
+    <span id="loading"></span>
+     <input type="submit" value="Encrypt, save to localStorage & submit" id="submit-button" />
+     <p id="req-field-desc"></p>
+   </form>
+  </div>
 
- <!-- localStorage default encrypted example -->
- <script>
-  var $j = jQuery.noConflict();
-  $j(document).ready(function(){
-   $j('#myForm4').handleStorage({aes:true});
-  });
- </script>
- <fieldset>
-  <legend><strong>Save to localStorage using AES encryption</strong></legend>
-  <form id="myForm4" name="myForm4" class="myForm4" method="post" action="">
-   <div>
-    <label for="name1">Name</label>
-    <input type="text" name="name1" id="name1" />
-   </div>
-   <div>
-    <label for="name">Address</label>
-    <input type="text" name="address1" id="address1" />
-   </div>
-   <div>
-    <label for="name">Phone</label>
-    <input type="text" name="phone1" id="phone1" />
-   </div>
-   <div>
-    <label for="name">Email</label>
-    <input type="text" name="email1" id="email1" />
-   </div>
-   <input type="submit" id="wtf" name="wtf" value="submit" />
-  </form>
-  <div id="defaultsetdiv"></div>
- </fieldset>
+  <!-- example using AES encrypted sessionStorage -->
+  <script>
+   var $j = jQuery.noConflict();
+   $j(document).ready(function() {
+    $j('#sessions-aes').handleStorage({storage:'sessionStorage',aes:true});
+   });
+  </script>
+  <div id="contact-form" class="clearfix">
+   <h3>Example using HTML5 sessionStorage with AES encryption</h3>
+   <form id="sessions-aes" name="sessions-aes" style="sessions-aes" method="post" action="">
+    <label for="name">Name: <span class="required">*</span></label>
+     <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
+    <label for="email">Email Address: <span class="required">*</span></label>
+     <input type="email" id="email" name="email" value="" placeholder="johndoe@example.com" required="required" />
+    <label for="message">Message: <span class="required">*</span></label>
+     <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
+    <span id="loading"></span>
+     <input type="submit" value="Encrypt, save to sessionStorage & submit" id="submit-button" />
+     <p id="req-field-desc"></p>
+   </form>
+  </div>
 
-
- <!-- sessionStorage default encrypted examples -->
- <script>
-  var $j = jQuery.noConflict();
-  $j(document).ready(function(){
-   $j('#myForm5').handleStorage({storage:'sessionStorage',aes:true});
-  });
- </script>
- <fieldset>
-  <legend><strong>Save to session storage using AES encryption</strong></legend>
-  <form id="myForm5" name="myForm5" class="myForm5" method="post" action="">
-   <div>
-    <label for="name">Name</label>
-    <input type="text" name="name1" id="name1" />
-   </div>
-   <div>
-    <label for="name">Address</label>
-    <input type="text" name="address1" id="address1" />
-   </div>
-   <div>
-    <label for="name">Phone</label>
-    <input type="text" name="phone1" id="phone1" />
-   </div>
-   <div>
-    <label for="name">Email</label>
-    <input type="text" name="email1" id="email1" />
-   </div>
-   <input type="submit" id="wtf" name="wtf" value="submit" />
-  </form>
-  <div id="defaultsetdiv"></div>
- </fieldset>
-
-
- <!-- cookie Storage default encrypted examples -->
- <script>
-  var $j = jQuery.noConflict();
-  $j(document).ready(function(){
-   $j('#myForm6').handleStorage({storage:'cookie',aes:true});
-  });
- </script>
- <fieldset>
-  <legend><strong>Save to cookies using AES encryption</strong></legend>
-  <form id="myForm6" name="myForm6" class="myForm6" method="post" action="">
-   <div>
-    <label for="name">Name</label>
-    <input type="text" name="name1" id="name1" />
-   </div>
-   <div>
-    <label for="name">Address</label>
-    <input type="text" name="address1" id="address1" />
-   </div>
-   <div>
-    <label for="name">Phone</label>
-    <input type="text" name="phone1" id="phone1" />
-   </div>
-   <div>
-    <label for="name">Email</label>
-    <input type="text" name="email1" id="email1" />
-   </div>
-   <input type="submit" id="wtf" name="wtf" value="submit" />
-  </form>
-  <div id="defaultsetdiv"></div>
- </fieldset>
+  <!-- example using AES encrypted localStorage -->
+  <script>
+   var $j = jQuery.noConflict();
+   $j(document).ready(function() {
+    $j('#cookies-aes').handleStorage({storage:'cookies',aes:true});
+   });
+  </script>
+  <div id="contact-form" class="clearfix">
+   <h3>Example using cookies with AES encryption</h3>
+   <form id="cookies-aes" name="cookies-aes" style="cookies-aes" method="post" action="">
+    <label for="name">Name: <span class="required">*</span></label>
+     <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
+    <label for="email">Email Address: <span class="required">*</span></label>
+     <input type="email" id="email" name="email" value="" placeholder="johndoe@example.com" required="required" />
+    <label for="message">Message: <span class="required">*</span></label>
+     <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
+    <span id="loading"></span>
+     <input type="submit" value="Encrypt, save to cookie & submit" id="submit-button" />
+     <p id="req-field-desc"></p>
+   </form>
+  </div>
+ </div>
 
 </body>
 </html>
