@@ -38,7 +38,7 @@
   * @param method string Method to employ for form ID DOM object
   *                      init (transparent getting and setting of
   *                      form elements)
-  * @param options object Options object for specific operations
+  * @param options object options object for specific operations
   *                       appID, storage, aes
   */
  $.fn.handleStorage = function(method) {
@@ -53,7 +53,7 @@
    aes:     false,                   // Use AES encryption? (true or false)
    uuid:    '',                      // Random RFC-4122 string used as AES password
    form:    $(this).attr('id'),      // Place holder for form ID
-   data:    {}                       // Place holder for existing form storage objects
+   data:    {}                       // Place holder for _e form storage objects
   };
 
   /**
@@ -68,17 +68,17 @@
     *           of form data using HTML5 client storage or cookies with
     *           optional AES encryption support
     */
-   init: function(options){
-    var opts = $.extend({}, defaults, options);
-    if (validateOptions(opts)){
-     handleKey(opts);
-     opts.data[opts.appID] = (existing(opts)) ? existing(opts) : {};
-     var orig = getStorage(opts);
-     if ((typeof orig==='object')&&(sizeChk(orig)>0)){
-      setForm(opts, orig);
+   init: function(o){
+    var opts = $.extend({}, defaults, o);
+    if (vO(opts)){
+     hK(opts);
+     opts.data[opts.appID] = (_e(opts)) ? _e(opts) : {};
+     var orig = gStore(opts);
+     if ((typeof orig==='object')&&(sChk(orig)>0)){
+      sF(opts, orig);
      }
      $('#'+opts.form).live('submit', function(e){
-      saveForm(opts);
+      svF(opts);
      });
      return true;
     } else {
@@ -88,10 +88,10 @@
   };
 
   /**
-   * @function sizeChk
+   * @function sChk
    * @abstract Performs a check on object sizes
    */
-  var sizeChk = function(obj) {
+  var sChk = function(obj) {
    var n = 0;
    $.each(obj, function(k, v){
     if (obj.hasOwnProperty(k)) n++;
@@ -100,76 +100,76 @@
   }
 
   /**
-   * @function setItem
+   * @function sI
    * @abstract Proxy function for setting data with specified client storage
    *           option
    */
-  var setItem = function(type, k, v) {
+  var sI = function(type, k, v) {
    var x = false;
-   type = (validateStorage(type)) ? type : 'cookie';
+   type = (vStore(type)) ? type : 'cookie';
    switch(type) {
     case 'localStorage':
-     x = setLocal(k, v);
+     x = sL(k, v);
      break;
     case 'sessionStorage':
-     x = setSession(k, v);
+     x = sS(k, v);
      break;
     case 'cookie':
-     x = setCookie(k, v);
+     x = sC(k, v);
      break;
     default:
-     x = setLocal(k, v);
+     x = sL(k, v);
      break;
    }
    return x;
   }
 
   /**
-   * @function getItem
+   * @function gI
    * @abstract Proxy function for getting data with specified client storage
    *           option
    */
-  var getItem = function(type, k) {
+  var gI = function(type, k) {
    var x = false;
-   type = (validateStorage(type)) ? type : 'cookie';
+   type = (vStore(type)) ? type : 'cookie';
    switch(type) {
     case 'localStorage':
-     x = getLocal(k);
+     x = gL(k);
      break;
     case 'sessionStorage':
-     x = getSession(k);
+     x = gS(k);
      break;
     case 'cookie':
-     x = getCookie(k);
+     x = gC(k);
      break;
     default:
-     x = getLocal(k);
+     x = gL(k);
      break;
    }
    return x;
   }
 
   /**
-   * @function setLocal
+   * @function sL
    * @abstract Function used to set localStorage items
    */
-  var setLocal = function(k, v) {
+  var sL = function(k, v) {
    return (localStorage.setItem(k, v)) ? false : true;
   }
 
   /**
-   * @function setSession
+   * @function sS
    * @abstract Function used to set sessionStorage items
    */
-  var setSession = function(k, v) {
+  var sS = function(k, v) {
    return (sessionStorage.setItem(k, v)) ? false : true;
   }
 
   /**
-   * @function setCookie
+   * @function sC
    * @abstract Function used to set cookie items
    */
-  var setCookie = function(k, v) {
+  var sC = function(k, v) {
    if (typeof $.cookie === 'function') {
     return ($.cookie(k, v, {expires: 7})) ? true : false;
    } else {
@@ -178,26 +178,26 @@
   }
 
   /**
-   * @function getLocal
+   * @function gL
    * @abstract Function used to get localStorage items
    */
-  var getLocal = function(k) {
+  var gL = function(k) {
    return (localStorage.getItem(k)) ? localStorage.getItem(k) : false;
   }
 
   /**
-   * @function getSession
+   * @function gS
    * @abstract Function used to get sessionStorage items
    */
-  var getSession = function(k) {
+  var gS = function(k) {
    return (sessionStorage.getItem(k)) ? sessionStorage.getItem(k) : false;
   }
 
   /**
-   * @function setCookie
+   * @function sC
    * @abstract Function used to get cookie items
    */
-  var getCookie = function(name) {
+  var gC = function(name) {
    if (typeof $.cookie === 'function') {
     return ($.cookie(name)) ? $.cookie(name) : false;
    } else {
@@ -206,29 +206,29 @@
   }
 
   /**
-   * @function existing
+   * @function _e
    * @abstract Function used to return configured storage items
    *           as JSON object
    */
-  var existing = function(options) {
-   return (getItem(options.storage, options.appID)) ?
-    JSON.parse(getItem(options.storage, options.appID)) : false;
+  var _e = function(o) {
+   return (gI(o.storage, o.appID)) ?
+    JSON.parse(gI(o.storage, o.appID)) : false;
   }
 
   /**
-   * @function getStorage
-   * @abstract Function to compare and decrypt if necessary, existing
+   * @function gStore
+   * @abstract Function to compare and decrypt if necessary, _e
    *           storage items to configured form input elements
    */
-  var getStorage = function(options) {
+  var gStore = function(o) {
    var ret={}, x;
-   if (validateString(options.data[options.appID][options.form])){
-    $.each($('#'+options.form+' :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea, input[type="email"], input[type="url"], input[type="number"], input[type="range"], input[type="date"], input[type="month"], input[type="week"], input[type="time"], input[type="datetime"], input[type="datetime-local"], input[type="search"], input[type="color"]'), function(k, v){
-     if ((validateString(v.name)!==false)&&
-         (validateString(options.data[options.appID][options.form][v.name])!==false)){
-      ret[v.name] = ((options.aes)&&(options.key)&&(x!==false)) ?
-       GibberishAES.dec(options.data[options.appID][options.form][v.name], options.uuid) :
-       options.data[options.appID][options.form][v.name];
+   if (vStr(o.data[o.appID][o.form])){
+    $.each($('#'+o.form+' > :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea, input[type="email"], input[type="url"], input[type="number"], input[type="range"], input[type="date"], input[type="month"], input[type="week"], input[type="time"], input[type="datetime"], input[type="datetime-local"], input[type="search"], input[type="color"]'), function(k, v){
+     if ((vStr(v.name)!==false)&&
+         (vStr(o.data[o.appID][o.form][v.name])!==false)){
+      ret[v.name] = ((o.aes)&&(o.key)&&(x!==false)) ?
+       GibberishAES.dec(o.data[o.appID][o.form][v.name], o.uuid) :
+       o.data[o.appID][o.form][v.name];
      }
     });
    }
@@ -236,42 +236,42 @@
   }
 
   /**
-   * @function setForm
+   * @function sF
    * @abstract Sets input values within configured form
    */
-  var setForm = function(options, arg){
+  var sF = function(o, arg){
    $.each(arg, function(a, b){
-    if (($('#'+options.form+' input[name='+a+']').attr('name')===a)||
-        ($('#'+options.form+' textarea[name='+a+']').attr('name')===a)&&
-        (validateString(b)!==false)){
-     $('#'+options.form+' input[name='+a+'], textarea[name='+a+']').val(b);
+    if (($('#'+o.form+' > input[name='+a+']').attr('name')===a)||
+        ($('#'+o.form+' > textarea[name='+a+']').attr('name')===a)&&
+        (vStr(b)!==false)){
+     $('#'+o.form+' > input[name='+a+'], #'+o.form+' > textarea[name='+a+']').val(b);
     }
    });
   }
 
   /**
-   * @function saveForm
+   * @function svF
    * @abstract Saves non-null form elements to configured client storage
    *           mechanism, encrypting if configured as a nested JSON object
    */
-  var saveForm = function(options) {
-   var x={}; x[options.form]={};
-   $.each($('#'+options.form+' :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea, input[type="email"], input[type="url"], input[type="number"], input[type="range"], input[type="date"], input[type="month"], input[type="week"], input[type="time"], input[type="datetime"], input[type="datetime-local"], input[type="search"], input[type="color"]'), function(k, v){
-    if ((validateString(v.value)!==false)&&(validateString(v.name)!==false)){
-     x[options.form][v.name] = ((options.aes)&&(options.key)) ?
-      GibberishAES.enc(v.value, options.uuid) : v.value;
+  var svF = function(o) {
+   var x={}; x[o.form]={};
+   $.each($('#'+o.form+' > :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea, input[type="email"], input[type="url"], input[type="number"], input[type="range"], input[type="date"], input[type="month"], input[type="week"], input[type="time"], input[type="datetime"], input[type="datetime-local"], input[type="search"], input[type="color"]'), function(k, v){
+    if ((vStr(v.value)!==false)&&(vStr(v.name)!==false)){
+     x[o.form][v.name] = ((o.aes)&&(o.key)) ?
+      GibberishAES.enc(v.value, o.uuid) : v.value;
     }
    });
-   options.data[options.appID] = (sizeChk(options.data[options.appID])>0) ?
-    $.extend({}, options.data[options.appID], x) : x;
-   setItem(options.storage, options.appID, JSON.stringify(options.data[options.appID]));
+   o.data[o.appID] = (sChk(o.data[o.appID])>0) ?
+    $.extend({}, o.data[o.appID], x) : x;
+   sI(o.storage, o.appID, JSON.stringify(o.data[o.appID]));
   }
 
   /**
-   * @function validateString
+   * @function vStr
    * @abstract Verifies string integrity
    */
-  var validateString = function(string){
+  var vStr = function(string){
    if (string){
     return ((string===false)||(string.length===0)||(!string)||(string===null)||
             (string==='')||(typeof string==='undefined')) ? false : true;
@@ -281,11 +281,11 @@
   }
 
   /**
-   * @function validateStorage
+   * @function vStore
    * @abstract Ensures configured storage mechanism is available for the
    *           browser engine
    */
-  var validateStorage = function(type){
+  var vStore = function(type){
    try {
     return ((type in window)&&(window[type])) ? true : false;
    } catch (e) {
@@ -294,10 +294,10 @@
   }
 
   /**
-   * @function validateOptions
-   * @abstract Tests configured options vs. available functionality
+   * @function vO
+   * @abstract Tests configured o vs. available functionality
    */
-  var validateOptions = function(opts){
+  var vO = function(opts){
    var ret = true;
    if (opts.aes){
     if (!$.isFunction(GibberishAES.enc)){
@@ -317,10 +317,10 @@
   }
 
   /**
-   * @function genUUID
+   * @function gUUID
    * @abstract Generates a valid RFC-4122 UUID
    */
-  var genUUID = function(len){
+  var gUUID = function(len){
    var chars = '0123456789abcdef'.split('');
    var uuid = [], rnd = Math.random, r;
    uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
@@ -336,25 +336,25 @@
   }
 
   /**
-   * @function handleKey
+   * @function hK
    * @abstract Performs key generation or retrieval
    */
-  var handleKey = function(options) {
-   if (options.aes) {
-    options.key = (getItem(options.storage, 'uuid')) ?
-     getItem(options.storage, 'uuid') : genUUID(null);
-    setItem(options.storage, 'uuid', options.key);
+  var hK = function(o) {
+   if (o.aes) {
+    o.key = (gI(o.storage, 'uuid')) ?
+     gI(o.storage, 'uuid') : gUUID(null);
+    sI(o.storage, 'uuid', o.key);
    }
   }
 
   /**
-   * @function __recurse
+   * @function __r
    * @abstract Function used help debug objects recursively
    */
-  var __recurse = function(obj){
+  var __r = function(obj){
    $.each(obj, function(x,y){
     if (typeof y==='object'){
-     __recurse(y);
+     __r(y);
     } else {
      console.log(x+' => '+y);
     }
