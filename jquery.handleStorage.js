@@ -41,6 +41,7 @@
   * @param options object options object for specific operations
   *                       appID, storage, aes
   */
+
  $.fn.handleStorage = function(method) {
 
   /**
@@ -71,7 +72,6 @@
    init: function(o){
     var opts = $.extend({}, defaults, o);
     if (vO(opts)){
-     hK(opts);
      opts.data[opts.appID] = (_e(opts)) ? _e(opts) : {};
      var orig = gStore(opts);
      if ((typeof orig==='object')&&(sChk(orig)>0)){
@@ -222,12 +222,12 @@
    */
   var gStore = function(o) {
    var ret={}, x;
-   if (vStr(o.data[o.appID][o.form])){
-    $.each($('#'+o.form+' > :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea, input[type="email"], input[type="url"], input[type="number"], input[type="range"], input[type="date"], input[type="month"], input[type="week"], input[type="time"], input[type="datetime"], input[type="datetime-local"], input[type="search"], input[type="color"]'), function(k, v){
+   if (typeof o.data[o.appID][o.form]==='object'){
+    $.each($('#'+o.form+' > :input'), function(k, v){
      if ((vStr(v.name)!==false)&&
          (vStr(o.data[o.appID][o.form][v.name])!==false)){
-      ret[v.name] = ((o.aes)&&(o.key)&&(x!==false)) ?
-       GibberishAES.dec(o.data[o.appID][o.form][v.name], o.uuid) :
+      ret[v.name] = ((o.aes)&&(o.data[o.appID][o.form]['uuid'])&&(x!==false)) ?
+       GibberishAES.dec(o.data[o.appID][o.form][v.name], o.data[o.appID][o.form]['uuid']) :
        o.data[o.appID][o.form][v.name];
      }
     });
@@ -240,13 +240,15 @@
    * @abstract Sets input values within configured form
    */
   var sF = function(o, arg){
-   $.each(arg, function(a, b){
-    if (($('#'+o.form+' > input[name='+a+']').attr('name')===a)||
-        ($('#'+o.form+' > textarea[name='+a+']').attr('name')===a)&&
-        (vStr(b)!==false)){
-     $('#'+o.form+' > input[name='+a+'], #'+o.form+' > textarea[name='+a+']').val(b);
-    }
-   });
+   if (sChk(arg)>0){
+    $.each(arg, function(a, b){
+     if (($('#'+o.form+' > input[name='+a+']').attr('name')===a)||
+         ($('#'+o.form+' > textarea[name='+a+']').attr('name')===a)&&
+         (vStr(b)!==false)){
+      $('#'+o.form+' > input[name='+a+'], #'+o.form+' > textarea[name='+a+']').val(b);
+     }
+    });
+   }
   }
 
   /**
@@ -254,12 +256,16 @@
    * @abstract Saves non-null form elements to configured client storage
    *           mechanism, encrypting if configured as a nested JSON object
    */
-  var svF = function(o) {
+  var svF = function(o) { __r(o.data);
    var x={}; x[o.form]={};
-   $.each($('#'+o.form+' > :text, :password, :file, input:hidden, input:checkbox:checked, input:radio:checked, textarea, input[type="email"], input[type="url"], input[type="number"], input[type="range"], input[type="date"], input[type="month"], input[type="week"], input[type="time"], input[type="datetime"], input[type="datetime-local"], input[type="search"], input[type="color"]'), function(k, v){
+   $.each($('#'+o.form+' > :input'), function(k, v){
     if ((vStr(v.value)!==false)&&(vStr(v.name)!==false)){
-     x[o.form][v.name] = ((o.aes)&&(o.key)) ?
-      GibberishAES.enc(v.value, o.uuid) : v.value;
+     if ((o.aes)&&(!o.uuid)) {
+      o.uuid = hK(o);
+      x[o.form]['uuid'] = o.uuid;
+     }
+     x[o.form][v.name] = ((o.aes)&&(x[o.form]['uuid'])) ?
+      GibberishAES.enc(v.value, x[o.form]['uuid']) : v.value;
     }
    });
    o.data[o.appID] = (sChk(o.data[o.appID])>0) ?
@@ -340,10 +346,12 @@
    * @abstract Performs key generation or retrieval
    */
   var hK = function(o) {
-   if (o.aes) {
-    o.key = (gI(o.storage, 'uuid')) ?
-     gI(o.storage, 'uuid') : gUUID(null);
-    sI(o.storage, 'uuid', o.key);
+   if (o.aes){
+    var x = (_e(o)) ? _e(o) : {};
+    x[o.form] = (x[o.form]) ? x[o.form] : {};
+    var y = (vStr(x[o.form]['uuid'])) ?
+     x[o.form]['uuid'] : gUUID(null);
+    return y;
    }
   }
 
