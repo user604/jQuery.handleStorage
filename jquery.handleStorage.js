@@ -42,7 +42,7 @@
   *                       appID, storage, aes
   */
 
- $.fn.handleStorage = function(method) {
+ $.fn.handleStorage = function(method){
 
   /**
    * @object defaults
@@ -53,8 +53,8 @@
    storage: 'localStorage',          // Storage type localStorage || sessionStorage || cookie (cookie storage requires jQuery cookie plugin)
    aes:     false,                   // Use AES encryption? (true or false)
    uuid:    '',                      // Random RFC-4122 string used as AES password
-   form:    $(this).attr('id'),      // Place holder for form ID
-   data:    {}                       // Place holder for _e form storage objects
+   form:    '',                      // Place holder for form ID
+   data:    {}                       // Place holder for storage objects
   };
 
   /**
@@ -64,20 +64,21 @@
   var methods = {
 
    /**
-    * @function init
+    * @method init
     * @abstract Default plug-in method. Provides transparent client storage
     *           of form data using HTML5 client storage or cookies with
     *           optional AES encryption support
     */
    init: function(o){
     var opts = $.extend({}, defaults, o);
+    opts.form = $(this).attr('id');
     if (vO(opts)){
      opts.data[opts.appID] = (_e(opts)) ? _e(opts) : {};
      var orig = gStore(opts);
      if ((typeof orig==='object')&&(sChk(orig)>0)){
       sF(opts, orig);
      }
-     $('#'+opts.form).live('submit', function(e){
+     $('#'+opts.form).delegate('input, input:radio:selected, input:checkbox:checked, textarea', 'change keyup blur submit', function(){
       svF(opts);
      });
      return true;
@@ -85,6 +86,7 @@
      return false;
     }
    }
+
   };
 
   /**
@@ -217,7 +219,7 @@
 
   /**
    * @function gStore
-   * @abstract Function to compare and decrypt if necessary, _e
+   * @abstract Function to compare and decrypt if necessary, existing
    *           storage items to configured form input elements
    */
   var gStore = function(o) {
@@ -227,7 +229,8 @@
      if ((vStr(v.name)!==false)&&
          (vStr(o.data[o.appID][o.form][v.name])!==false)){
       ret[v.name] = ((o.aes)&&(o.data[o.appID][o.form]['uuid'])&&(x!==false)) ?
-       GibberishAES.dec(o.data[o.appID][o.form][v.name], o.data[o.appID][o.form]['uuid']) :
+       GibberishAES.dec(o.data[o.appID][o.form][v.name],
+                        o.data[o.appID][o.form]['uuid']) :
        o.data[o.appID][o.form][v.name];
      }
     });
@@ -256,7 +259,7 @@
    * @abstract Saves non-null form elements to configured client storage
    *           mechanism, encrypting if configured as a nested JSON object
    */
-  var svF = function(o) { __r(o.data);
+  var svF = function(o){
    var x={}; x[o.form]={};
    $.each($('#'+o.form+' > :input'), function(k, v){
     if ((vStr(v.value)!==false)&&(vStr(v.name)!==false)){

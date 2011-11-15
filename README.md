@@ -1,9 +1,11 @@
 
-
 #jQuery plugin to impliment HTML5 form storage
 
 Supports HTML5 localStorage, sessionStorage or cookie support
-for older browsers. Optional AES encryption support.
+for older browsers. Optional AES encryption support. Optional
+degraded cookie support (with plug-in, see *requirements). Now
+supports auto-save for form elements to prevent loss of work
+prior to form submission.
 
   Fork me @ https://www.github.com/jas-/jQuery.handleStorage
 
@@ -23,6 +25,10 @@ for older browsers. Optional AES encryption support.
 * appID:   Unique application identifier
 * storage: HTML5 localStorage, sessionStorage and cookies supported
 * aes:     Use AES encryption for client storage objects
+
+## NOTES:
+If your paranoid about compromises to the newer HTML5 storage mechanisms usage of the
+sessionStorage option will destroy client storage data as the browser is exited.
 
 ## EXAMPLES:
 
