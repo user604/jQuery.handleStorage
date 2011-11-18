@@ -33,6 +33,8 @@ sessionStorage option will destroy client storage data as the browser is exited.
 ## EXAMPLES:
 
 ### localStorage examples:
+The localStorage option within HTML5 allows for persistent client storage of
+key/value pairs. This is the default method of client storage.
 
 #### Default usage using HTML5 localStorage
 The default use is simple and users persistent storage by implementing the HTML5
@@ -60,12 +62,12 @@ $('#form').handleStorage({aes:true});
 ```
 
 ### sessionStorage examples:
+Specifying the sessionStorage option allows for client storage of form data ONLY
+while the users browser is open. This is the more secure option in terms of a
+web application which requires authentication.
 
 #### Default usage using HTML5 sessionStorage
-If you wish to only allow client storage of form data while the client browser
-is open, the sessionStorage option will provide some additional security of
-the users entered form data while persisting the data while the user is in an
-authenticated session.
+An example of using the sessionStorage HTML5 option
 
 ```javascript
 $('#form').handleStorage({storage:'sessionStorage'});
