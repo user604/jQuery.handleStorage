@@ -43,7 +43,7 @@
   </script>
   <div id="contact-form" class="clearfix">
    <h3>Example using HTML5 localStorage</h3>
-   <p>The default use is simple and users persistent storage by implementing the HTML5 localStorage option</p>
+   <p>The default use is simple and uses persistent storage by implementing the HTML5 localStorage option</p>
    <form id="default" name="default" style="defalt" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
@@ -66,6 +66,7 @@
   </script>
   <div id="contact-form" class="clearfix">
    <h3>Example using HTML5 sessionStorage</h3>
+   <p>Using sessionStorage allows for persistent client storage ONLY while the users browser is open</p>
    <form id="sessions" name="sessions" style="sessions" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
@@ -88,6 +89,7 @@
   </script>
   <div id="contact-form" class="clearfix">
    <h3>Example using cookies (for non-HTML5 compliant browsers, auto-fallback)</h3>
+   <p>For those users that are still using older browsers option cookie storage is available but requires the jquery cookie plugin (see above for URL)</p>
    <form id="cookies" name="cookies" style="cookies" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
@@ -110,6 +112,7 @@
   </script>
   <div id="contact-form" class="clearfix">
    <h3>Example using HTML5 localStorage with AES encryption</h3>
+   <p>If you wish to use persistent storage and provide some additional security to the saved form data a transparent AES-CBC encryption method is available. This option does require the Gibberish-AES plug-in as noted above.</p>
    <form id="default-aes" name="default-aes" style="default-aes" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
@@ -132,6 +135,7 @@
   </script>
   <div id="contact-form" class="clearfix">
    <h3>Example using HTML5 sessionStorage with AES encryption</h3>
+   <p>This example provides the best security of client storage data as the client closes their browser the data gets reset and while the users browser is open the data is encrypted with the AES-CBC cipher</p>
    <form id="sessions-aes" name="sessions-aes" style="sessions-aes" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
@@ -154,6 +158,7 @@
   </script>
   <div id="contact-form" class="clearfix">
    <h3>Example using cookies with AES encryption</h3>
+   <p>An example using AES-CBC encryption with degraded cookie support.</p>
    <form id="cookies-aes" name="cookies-aes" style="cookies-aes" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
