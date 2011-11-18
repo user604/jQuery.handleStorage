@@ -261,12 +261,9 @@
    */
   var svF = function(o){
    var x={}; x[o.form]={};
+   x[o.form]['uuid'] = ((o.aes)&&(!o.uuid)) ? hK(o) : o.uuid;
    $.each($('#'+o.form+' > :input'), function(k, v){
     if ((vStr(v.value)!==false)&&(vStr(v.name)!==false)){
-     if ((o.aes)&&(!o.uuid)) {
-      o.uuid = hK(o);
-      x[o.form]['uuid'] = o.uuid;
-     }
      x[o.form][v.name] = ((o.aes)&&(x[o.form]['uuid'])) ?
       GibberishAES.enc(v.value, x[o.form]['uuid']) : v.value;
     }
