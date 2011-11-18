@@ -33,12 +33,16 @@ sessionStorage option will destroy client storage data as the browser is exited.
 ## EXAMPLES:
 
 ### localStorage examples:
-* Default usage using HTML5 localStorage
+
+#### Default usage using HTML5 localStorage
+
 ```javascript
 $('#form').handleStorage();
 ```
 
-* Default usage using HTML5 localStorage with custom appID
+
+Default usage using HTML5 localStorage with custom appID
+
 ```javascript
 $('#form').handleStorage({appID:'myWickedApp'});
 ```
