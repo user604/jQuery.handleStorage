@@ -35,51 +35,80 @@ sessionStorage option will destroy client storage data as the browser is exited.
 ### localStorage examples:
 
 #### Default usage using HTML5 localStorage
+The default use is simple and users persistent storage by implementing the HTML5
+localStorage option
 
 ```javascript
 $('#form').handleStorage();
 ```
 
-
-Default usage using HTML5 localStorage with custom appID
+#### Default usage using HTML5 localStorage with custom appID
+By specifying the appID variable you can separate multiple forms as the default
+use will combine all forms into sub-objects of the default appID
 
 ```javascript
 $('#form').handleStorage({appID:'myWickedApp'});
 ```
 
-* Default usage using HTML5 localStorage with AES encryption
+#### Default usage using HTML5 localStorage with AES encryption
+If you wish to use persistent storage and provide some additional security
+to the saved form data a transparent AES-CBC encryption method is available.
+This option does require the Gibberish-AES plug-in as noted above.
+
 ```javascript
 $('#form').handleStorage({aes:true});
 ```
 
 ### sessionStorage examples:
-* Default usage using HTML5 sessionStorage
+
+#### Default usage using HTML5 sessionStorage
+If you wish to only allow client storage of form data while the client browser
+is open, the sessionStorage option will provide some additional security of
+the users entered form data while persisting the data while the user is in an
+authenticated session.
+
 ```javascript
 $('#form').handleStorage({storage:'sessionStorage'});
 ```
 
-* Default usage using HTML5 sessionStorage with custom appID
+#### Default usage using HTML5 sessionStorage with custom appID
+Here is an example of specifying the sessionStorage option with a custom
+appID for client storage.
+
 ```javascript
 $('#form').handleStorage({storage:'sessionStorage',appID:'myWickedApp'});
 ```
 
-* Default usage using HTML5 sessionStorage with AES encryption
+#### Default usage using HTML5 sessionStorage with AES encryption
+This example provides the best security of client storage data as the client
+closes their browser the data gets reset and while the users browser is open
+the data is encrypted with the AES-CBC cipher
+
 ```javascript
 $('#form').handleStorage({storage:'sessionStorage',aes:true});
 ```
 
 ### cookie storage examples:
-* Default usage using cookies for client storage
+
+#### Default usage using cookies for client storage
+For those users that are still using older browsers option cookie storage is
+available but requires the jquery cookie plugin (see above for URL)
+
 ```javascript
 $('#form').handleStorage({storage:'cookies'});
 ```
 
-* Default usage using cookies for client storage with custom appID
+#### Default usage using cookies for client storage with custom appID
+An example using cookies with a custom appID (good for multiple forms if you
+wish to segregate the storage objects)
+
 ```javascript
 $('#form').handleStorage({storage:'cookies',appID:'myWickedApp'});
 ```
 
-* Default usage using cookies for client storage with AES encryption
+#### Default usage using cookies for client storage with AES encryption
+An example using AES-CBC encryption with degraded cookie support.
+
 ```javascript
 $('#form').handleStorage({storage:'cookies',aes:true});
 ```
