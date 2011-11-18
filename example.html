@@ -43,6 +43,7 @@
   </script>
   <div id="contact-form" class="clearfix">
    <h3>Example using HTML5 localStorage</h3>
+   <p>The default use is simple and users persistent storage by implementing the HTML5 localStorage option</p>
    <form id="default" name="default" style="defalt" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
@@ -165,6 +166,18 @@
      <p id="req-field-desc"></p>
    </form>
   </div>
+
+  <!-- example using localStorage for static content
+  <script>
+   var $j = jQuery.noConflict();
+   $j(document).ready(function() {
+    $j(window).handleStorage('store',{data:{primary:{key1:'value1',key2:'value2'}}});
+   });
+  </script>
+  <div id="contact-form" class="clearfix">
+   <h3>Example of using static storage</h3>
+  </div> -->
+
  </div>
 
 </body>
