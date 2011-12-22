@@ -1,4 +1,3 @@
-
 #jQuery plugin to impliment HTML5 form storage
 
 Supports HTML5 localStorage, sessionStorage or cookie support
@@ -22,9 +21,10 @@ prior to form submission.
 * AES encryption support
 
 ## OPTIONS:
-* appID:   Unique application identifier
-* storage: HTML5 localStorage, sessionStorage and cookies supported
-* aes:     Use AES encryption for client storage objects
+* appID:    Unique application identifier
+* interval: Auto-save interval (default is 5sec)
+* storage:  HTML5 localStorage, sessionStorage and cookies supported
+* aes:      Use AES encryption for client storage objects
 
 ## NOTES:
 If your paranoid about compromises to the newer HTML5 storage mechanisms usage of the
@@ -50,6 +50,14 @@ use will combine all forms into sub-objects of the default appID
 
 ```javascript
 $('#form').handleStorage({appID:'myWickedApp'});
+```
+
+#### Default usage using HTML5 localStorage with custom auto-save interval
+You have the option of specifying the interval of the auto-save feature. Currently
+the default is 5 seconds. In this example we specify 30 seconds.
+
+```javascript
+$('#form').handleStorage({interval:30000});
 ```
 
 #### Default usage using HTML5 localStorage with AES encryption
@@ -81,6 +89,14 @@ appID for client storage.
 $('#form').handleStorage({storage:'sessionStorage',appID:'myWickedApp'});
 ```
 
+#### Default usage using HTML5 sessionStorage with custom auto-save interval
+You have the option of specifying the interval of the auto-save feature. Currently
+the default is 5 seconds. In this example we specify 30 seconds.
+
+```javascript
+$('#form').handleStorage({storage:'sessionStorage,interval:30000});
+```
+
 #### Default usage using HTML5 sessionStorage with AES encryption
 This example provides the best security of client storage data as the client
 closes their browser the data gets reset and while the users browser is open
@@ -108,6 +124,14 @@ wish to segregate the storage objects)
 $('#form').handleStorage({storage:'cookies',appID:'myWickedApp'});
 ```
 
+#### Default usage using cookies with custom auto-save interval
+You have the option of specifying the interval of the auto-save feature. Currently
+the default is 5 seconds. In this example we specify 30 seconds.
+
+```javascript
+$('#form').handleStorage({storage:'cookies',interval:30000});
+```
+
 #### Default usage using cookies for client storage with AES encryption
 An example using AES-CBC encryption with degraded cookie support.
 
@@ -115,9 +139,48 @@ An example using AES-CBC encryption with degraded cookie support.
 $('#form').handleStorage({storage:'cookies',aes:true});
 ```
 
- Author: Jason Gerfen
- Email: jason.gerfen@gmail.com
- Copyright: Jason Gerfen
- Last updated: 06.23.2011
+## OBJECT DETAILS
+Here is an example of the contents of the object within any specified storage
+mechanism. As you can see it is a valid JSON object that is formatted for
+readability. Multiple forms can be stored within one object as shown here.
+(Which is the default method of storing form data).
 
- License: GPL
+```
+"jQuery.handleStorage": {
+    "default": {
+        "name": "jason gerfen",
+        "email": "jason.gerfen@gmail.com",
+        "message": "Test #1"
+    },
+    "default-aes": {
+        "uuid": "cb76ad8d-6539-4151-a70d-ed0628c083d5",
+        "name": "U2FsdGVkX1+J6IKgOD4E/Ni/VqnNf/FwZwaHotk4Gfc=",
+        "email": "U2FsdGVkX19xzInZdszNewMDlKOVZzDraUkhT2VCjtIfqgaZNYhzkKWUciUn0lCc",
+        "message": "U2FsdGVkX1+s0SczDn9TOP9FSpBvJCqVpbL9wyniQcs="
+    }
+}
+```
+
+Or if you would like to separate objects based on forms (done by specifying
+a separate 'appID' per form), this is what it would look like in the storage
+mechanism.
+
+```
+"jQuery.handleStorage": {
+    "default": {
+        "name": "jason gerfen",
+        "email": "jason.gerfen@gmail.com",
+        "message": "Test #1"
+    }
+}
+"myWickedApp": {
+    "default-aes": {
+        "uuid": "cb76ad8d-6539-4151-a70d-ed0628c083d5",
+        "name": "U2FsdGVkX1+J6IKgOD4E/Ni/VqnNf/FwZwaHotk4Gfc=",
+        "email": "U2FsdGVkX19xzInZdszNewMDlKOVZzDraUkhT2VCjtIfqgaZNYhzkKWUciUn0lCc",
+        "message": "U2FsdGVkX1+s0SczDn9TOP9FSpBvJCqVpbL9wyniQcs="
+    }
+}
+```
+
+Jason Gerfen - Licensed under the GNU Public License or GPL
