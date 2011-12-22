@@ -17,10 +17,11 @@
  * - Gibberish-AES libraries (optional - https://github.com/mdp/gibberish-aes)
  *
  * OPTIONS:
- * - appID:   Unique identifier used as storage object key
- * - storage: HTML5 localStorage, sessionStorage and cookies supported
- * - aes:     Use AES encryption for local storage
- * - uuid:    Random RFC-4122 string used as AES password
+ * - appID:    Unique identifier used as storage object key
+ * - interval: Amount of time betwen auto-saves (default 5sec)
+ * - storage:  HTML5 localStorage, sessionStorage and cookies supported
+ * - aes:      Use AES encryption for local storage
+ * - uuid:     Random RFC-4122 string used as AES password
  *
  * Author: Jason Gerfen
  * Email: jason.gerfen@gmail.com
@@ -49,12 +50,13 @@
    * @abstract Default set of options for plug-in
    */
   var defaults = {
-   appID:   'jQuery.handleStorage',  // Application ID, used as index
-   storage: 'localStorage',          // Storage type localStorage || sessionStorage || cookie (cookie storage requires jQuery cookie plugin)
-   aes:     false,                   // Use AES encryption? (true or false)
-   uuid:    '',                      // Random RFC-4122 string used as AES password
-   form:    '',                      // Place holder for form ID
-   data:    {}                       // Place holder for storage objects
+   appID:    'jQuery.handleStorage',  // Application ID, used as index
+   storage:  'localStorage',          // Storage type localStorage || sessionStorage || cookie (cookie storage requires jQuery cookie plugin)
+   interval: 5000,                    // Amount of time between auto-saves (default is 5sec)
+   aes:      false,                   // Use AES encryption? (true or false)
+   uuid:     '',                      // Random RFC-4122 string used as AES password
+   form:     '',                      // Place holder for form ID
+   data:     {}                       // Place holder for storage objects
   };
 
   /**
@@ -81,6 +83,7 @@
      $('#'+opts.form).delegate('input, input:radio:selected, input:checkbox:checked, textarea', 'change keyup blur submit', function(){
       svF(opts);
      });
+     setInterval(function(){svF(opts);}, opts.interval);
      return true;
     } else {
      return false;
@@ -353,6 +356,7 @@
      x[o.form]['uuid'] : gUUID(null);
     return y;
    }
+   return false;
   }
 
   /**
