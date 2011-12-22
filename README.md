@@ -27,8 +27,14 @@ prior to form submission.
 * aes:      Use AES encryption for client storage objects
 
 ## NOTES:
-If your paranoid about compromises to the newer HTML5 storage mechanisms usage of the
-sessionStorage option will destroy client storage data as the browser is exited.
+A quick note on security. Currently (12.22.2011), no security vulnerabilities
+exist within the newer HTML5 client storage mechanisms. However, local browser
+compromises exist when two people use the same machine. If you would like to
+provide the more secure method of saving form data the use of the 'sessionStorage'
+option will provide a 'per session' method of auto-saving to the client storage
+mechanisms. Additionally the use of the optional AES encryption feature will
+provide transparent encryption of the auto-saving features this plug-in
+provides.
 
 ## EXAMPLES:
 
