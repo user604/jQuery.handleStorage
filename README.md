@@ -154,12 +154,13 @@ readability. Multiple forms can be stored within one object as shown here.
 ```
 "jQuery.handleStorage": {
     "default": {
+        "uuid": "cb76ax8d-6539-4151-a70d-ed0628c083d5",
         "name": "jason gerfen",
         "email": "jason.gerfen@gmail.com",
         "message": "Test #1"
     },
     "default-aes": {
-        "uuid": "cb76ad8d-6539-4151-a70d-ed0628c083d5",
+        "uuid": "cb76ax8d-6539-4151-a70d-ed0628c083d5",
         "name": "U2FsdGVkX1+J6IKgOD4E/Ni/VqnNf/FwZwaHotk4Gfc=",
         "email": "U2FsdGVkX19xzInZdszNewMDlKOVZzDraUkhT2VCjtIfqgaZNYhzkKWUciUn0lCc",
         "message": "U2FsdGVkX1+s0SczDn9TOP9FSpBvJCqVpbL9wyniQcs="
@@ -174,6 +175,7 @@ mechanism.
 ```
 "jQuery.handleStorage": {
     "default": {
+        "uuid": "cb76ax8d-6539-4151-a70d-ed0628c083d5",
         "name": "jason gerfen",
         "email": "jason.gerfen@gmail.com",
         "message": "Test #1"
@@ -181,7 +183,7 @@ mechanism.
 }
 "myWickedApp": {
     "default-aes": {
-        "uuid": "cb76ad8d-6539-4151-a70d-ed0628c083d5",
+        "uuid": "cb76ax8d-6539-4151-a70d-ed0628c083d5",
         "name": "U2FsdGVkX1+J6IKgOD4E/Ni/VqnNf/FwZwaHotk4Gfc=",
         "email": "U2FsdGVkX19xzInZdszNewMDlKOVZzDraUkhT2VCjtIfqgaZNYhzkKWUciUn0lCc",
         "message": "U2FsdGVkX1+s0SczDn9TOP9FSpBvJCqVpbL9wyniQcs="
