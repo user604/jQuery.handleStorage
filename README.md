@@ -145,6 +145,33 @@ An example using AES-CBC encryption with degraded cookie support.
 $('#form').handleStorage({storage:'cookies',aes:true});
 ```
 
+### Using callback options
+Because responsive UI's are all the rage I have added a couple of callback options
+to help you provide this to your clients.
+
+#### Pre-Callback example
+Here is an example of executing a function before the auto-incrementing or form
+submit event has been called.
+
+```javascript
+$('#form').handleStorage({preCallback:function(){ console.log(this); }});
+```
+
+#### Callback example
+This callback gets executed anytime the save has been called and was successful. Keep
+in mind that this does take place ever 5 seconds with a default configuration.
+
+```javascript
+$('#form').handleStorage({callback:function(){ console.log(this); }});
+```
+
+#### errCallback example
+This callback gets executed anytime a save was unsuccessful.
+
+```javascript
+$('#form').handleStorage({errCallback:function(){ console.log(this); }});
+```
+
 ## OBJECT DETAILS
 Here is an example of the contents of the object within any specified storage
 mechanism. As you can see it is a valid JSON object that is formatted for
