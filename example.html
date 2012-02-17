@@ -8,7 +8,7 @@
  <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
 
  <!-- Load the jQuery libraries -->
- <script src="http://code.jquery.com/jquery-1.6.min.js"></script>
+ <script src="http://code.jquery.com/jquery.min.js"></script>
 
  <!-- Load the cookie libraries -->
  <script src="https://raw.github.com/carhartl/jquery-cookie/master/jquery.cookie.js"></script>
@@ -172,16 +172,74 @@
    </form>
   </div>
 
-  <!-- example using localStorage for static content
+  <!-- default options with success callback -->
   <script>
    var $j = jQuery.noConflict();
    $j(document).ready(function() {
-    $j(window).handleStorage('store',{data:{primary:{key1:'value1',key2:'value2'}}});
+    $j('#default-success').handleStorage({callback:function(){$j('#default-success').append('Form data saved successfully');}});
    });
   </script>
   <div id="contact-form" class="clearfix">
-   <h3>Example of using static storage</h3>
-  </div> -->
+   <h3>Example using defaults with success callback function</h3>
+   <p>You may wish to alert the user that form data was saved or even call an AJAX style function of syncing data to a remote server</p>
+   <form id="default-success" name="default-success" style="default-success" method="post" action="">
+    <label for="name">Name: <span class="required">*</span></label>
+     <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
+    <label for="email">Email Address: <span class="required">*</span></label>
+     <input type="email" id="email" name="email" value="" placeholder="johndoe@example.com" required="required" />
+    <label for="message">Message: <span class="required">*</span></label>
+     <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
+    <span id="loading"></span>
+     <input type="submit" value="Save & callback function on success" id="submit-button" />
+     <p id="req-field-desc"></p>
+   </form>
+  </div>
+
+  <!-- default options with pre save callback -->
+  <script>
+   var $j = jQuery.noConflict();
+   $j(document).ready(function() {
+    $j('#default-pre').handleStorage({preCallback:function(){$j('#default-pre').append('Executing prior to form save');}});
+   });
+  </script>
+  <div id="contact-form" class="clearfix">
+   <h3>Example using defaults with pre-save callback function</h3>
+   <p>This example could be used to load simple spinner or other message alerting the user form data is about to be saved</p>
+   <form id="default-pre" name="default-pre" style="default-pre" method="post" action="">
+    <label for="name">Name: <span class="required">*</span></label>
+     <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
+    <label for="email">Email Address: <span class="required">*</span></label>
+     <input type="email" id="email" name="email" value="" placeholder="johndoe@example.com" required="required" />
+    <label for="message">Message: <span class="required">*</span></label>
+     <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
+    <span id="loading"></span>
+     <input type="submit" value="Execute callback & save form" id="submit-button" />
+     <p id="req-field-desc"></p>
+   </form>
+  </div>
+
+  <!-- default options with on error callback -->
+  <script>
+   var $j = jQuery.noConflict();
+   $j(document).ready(function() {
+    $j('#default-error').handleStorage({errCallback:function(){$j('#default-error').append('An error occured during save, this should not happen');}});
+   });
+  </script>
+  <div id="contact-form" class="clearfix">
+   <h3>Example using defaults with an on error callback function</h3>
+   <p>Here we anticipate problems with auto-form saves by executing a callback to handle and alert the user there was a problem. This should never happen but then again neither should movies about troll hunting.</p>
+   <form id="default-error" name="default-error" style="default-error" method="post" action="">
+    <label for="name">Name: <span class="required">*</span></label>
+     <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
+    <label for="email">Email Address: <span class="required">*</span></label>
+     <input type="email" id="email" name="email" value="" placeholder="johndoe@example.com" required="required" />
+    <label for="message">Message: <span class="required">*</span></label>
+     <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
+    <span id="loading"></span>
+     <input type="submit" value="Encrypt, save to cookie & submit" id="submit-button" />
+     <p id="req-field-desc"></p>
+   </form>
+  </div>
 
  </div>
 
