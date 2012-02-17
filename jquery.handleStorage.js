@@ -50,13 +50,16 @@
    * @abstract Default set of options for plug-in
    */
   var defaults = {
-   appID:    'jQuery.handleStorage',  // Application ID, used as index
-   storage:  'localStorage',          // Storage type localStorage || sessionStorage || cookie (cookie storage requires jQuery cookie plugin)
-   interval: 5000,                    // Amount of time between auto-saves (default is 5sec)
-   aes:      false,                   // Use AES encryption? (true or false)
-   uuid:     '',                      // Random RFC-4122 string used as AES password
-   form:     '',                      // Place holder for form ID
-   data:     {}                       // Place holder for storage objects
+   appID:       'jQuery.handleStorage',  // Application ID, used as index
+   storage:     'localStorage',          // Storage type localStorage || sessionStorage || cookie (cookie storage requires jQuery cookie plugin)
+   interval:    5000,                    // Amount of time between auto-saves (default is 5sec)
+   aes:         false,                   // Use AES encryption? (true or false)
+   uuid:        '',                      // Random RFC-4122 string used as AES password
+   form:        '',                      // Place holder for form ID
+   data:        {},                      // Place holder for storage objects
+   callback:    function(){},            // An on save callback
+   preCallback: function(){},            // Process callback prior to save
+   errCallback: function(){}             // Callback to execute on error
   };
 
   /**
@@ -80,6 +83,7 @@
      if ((typeof orig==='object')&&(sChk(orig)>0)){
       sF(opts, orig);
      }
+     ((opts.preCallback)&&($.isFunction(opts.preCallback))) ? opts.preCallback($(this)) : false;
      $('#'+opts.form).delegate('input, input:radio:selected, input:checkbox:checked, textarea', 'change keyup blur submit', function(){
       svF(opts);
      });
@@ -273,7 +277,11 @@
    });
    o.data[o.appID] = (sChk(o.data[o.appID])>0) ?
     $.extend({}, o.data[o.appID], x) : x;
-   sI(o.storage, o.appID, JSON.stringify(o.data[o.appID]));
+   if (sI(o.storage, o.appID, JSON.stringify(o.data[o.appID]))){
+    ((o.callback)&&($.isFunction(o.callback))) ? o.callback.call($(this)) : false;
+   } else {
+    ((o.errCallback)&&($.isFunction(o.errCallback))) ? o.errCallback.call($(this)) : false;
+   }
   }
 
   /**
