@@ -21,10 +21,13 @@ prior to form submission.
 * AES encryption support
 
 ## OPTIONS:
-* appID:    Unique application identifier
-* interval: Auto-save interval (default is 5sec)
-* storage:  HTML5 localStorage, sessionStorage and cookies supported
-* aes:      Use AES encryption for client storage objects
+* appID:       Unique application identifier
+* interval:    Auto-save interval (default is 5sec)
+* storage:     HTML5 localStorage, sessionStorage and cookies supported
+* aes:         Use AES encryption for client storage objects
+* callback:    Executes a callback function on success saves
+* preCallback: Executes a callback function prior to any saves
+* errCallback: Executes a callback function when any save was unsuccessful
 
 ## NOTES:
 A quick note on security. Currently (12.22.2011), no security vulnerabilities
