@@ -237,7 +237,7 @@
          (vStr(o.data[o.appID][o.form][v.name])!==false)){
       ret[v.name] = ((o.aes)&&(o.data[o.appID][o.form]['uuid'])&&(x!==false)) ?
        GibberishAES.dec(o.data[o.appID][o.form][v.name],
-                        o.data[o.appID][o.form]['uuid']) :
+                        __strIV(o.data[o.appID][o.form]['uuid'])) :
        o.data[o.appID][o.form][v.name];
      }
     });
@@ -272,7 +272,7 @@
    $.each($('#'+o.form+' > :input'), function(k, v){
     if ((vStr(v.value)!==false)&&(vStr(v.name)!==false)){
      x[o.form][v.name] = ((o.aes)&&(x[o.form]['uuid'])) ?
-      GibberishAES.enc(v.value, x[o.form]['uuid']) : v.value;
+      GibberishAES.enc(v.value, __strIV(x[o.form]['uuid'])) : v.value;
     }
    });
    o.data[o.appID] = (sChk(o.data[o.appID])>0) ?
@@ -365,6 +365,17 @@
     return y;
    }
    return false;
+  }
+
+   /**
+    * @function strIV
+    * @abstract Generate IV from string
+    */
+   __strIV: function(s){
+    return (s) ?
+     encodeURI(s.replace(/-/gi, '').substring(16,Math.ceil(16*s.length)%s.length)) :
+     false;
+   }
   }
 
   /**
