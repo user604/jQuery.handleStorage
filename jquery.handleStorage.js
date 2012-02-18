@@ -367,15 +367,14 @@
    return false;
   }
 
-   /**
-    * @function strIV
-    * @abstract Generate IV from string
-    */
-   __strIV: function(s){
-    return (s) ?
-     encodeURI(s.replace(/-/gi, '').substring(16,Math.ceil(16*s.length)%s.length)) :
-     false;
-   }
+  /**
+   * @function strIV
+   * @abstract Generate IV from string
+   */
+  var __strIV = function(s){
+   return (s) ?
+    encodeURI(s.replace(/-/gi, '').substring(16,Math.ceil(16*s.length)%s.length)) :
+    false;
   }
 
   /**
