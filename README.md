@@ -106,7 +106,7 @@ You have the option of specifying the interval of the auto-save feature. Current
 the default is 5 seconds. In this example we specify 30 seconds.
 
 ```javascript
-$('#form').handleStorage({storage:'sessionStorage,interval:30000});
+$('#form').handleStorage({storage:'sessionStorage',interval:30000});
 ```
 
 #### Default usage using HTML5 sessionStorage with AES encryption
