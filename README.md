@@ -30,8 +30,11 @@ prior to form submission.
 * errCallback: Executes a callback function when any save was unsuccessful
 
 ## NOTES:
-A quick note on security. Currently (12.22.2011), no security vulnerabilities
-exist within the newer HTML5 client storage mechanisms. However, local browser
+A quick note on security. Currently (02.17.2012), a cross-domain bypass
+proof of concept vulnerability exists. Reference: http://www.securityfocus.com/bid/51765/discuss
+
+To help protect sensitive data employing the optional AES feature will
+assist in protecting the client storage information, moreover, local browser
 compromises exist when two people use the same machine. If you would like to
 provide the more secure method of saving form data the use of the 'sessionStorage'
 option will provide a 'per session' method of auto-saving to the client storage
