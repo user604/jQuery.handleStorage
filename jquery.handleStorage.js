@@ -253,9 +253,10 @@
    if (sChk(arg)>0){
     $.each(arg, function(a, b){
      if (($('#'+o.form+' > input[name='+a+']').attr('name')===a)||
+         ($('#'+o.form+' > select[name='+a+']').attr('name')===a)||
          ($('#'+o.form+' > textarea[name='+a+']').attr('name')===a)&&
          (vStr(b)!==false)){
-      $('#'+o.form+' > input[name='+a+'], #'+o.form+' > textarea[name='+a+']').val(b);
+      $('#'+o.form+' > input[name='+a+'], #'+o.form+' > select[name='+a+'], #'+o.form+' > textarea[name='+a+']').val(b);
      }
     });
    }
