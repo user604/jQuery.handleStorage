@@ -109,6 +109,20 @@
   }
 
   /**
+   * @function _l
+   * @abstract Performs check on current value of local storage objects
+   *           Uses 5mb for HTML5 local/session storage & 4k for cookies
+   */
+  var _l = function(type) {
+   var lim = (type == 'localStorage' || type == 'sessionStorage') ? 1024 * 1025 * 5 : 1024 * 4;
+   if (lim - unescape(encodeURIComponent(JSON.stringify(type))).length < 0) {
+	console.log('It seems the maximum quota has been met using '+type);
+	return false;
+   }
+   return true;
+  }
+
+  /**
    * @function sI
    * @abstract Proxy function for setting data with specified client storage
    *           option
@@ -116,19 +130,21 @@
   var sI = function(type, k, v) {
    var x = false;
    type = (vStore(type)) ? type : 'cookie';
-   switch(type) {
-    case 'localStorage':
-     x = sL(k, v);
-     break;
-    case 'sessionStorage':
-     x = sS(k, v);
-     break;
-    case 'cookie':
-     x = sC(k, v);
-     break;
-    default:
-     x = sL(k, v);
-     break;
+   if (_l(type)) {
+	switch(type) {
+     case 'localStorage':
+      x = sL(k, v);
+      break;
+     case 'sessionStorage':
+      x = sS(k, v);
+      break;
+     case 'cookie':
+      x = sC(k, v);
+      break;
+     default:
+      x = sL(k, v);
+      break;
+    }
    }
    return x;
   }

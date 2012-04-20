@@ -19,6 +19,7 @@ prior to form submission.
 * HTML5 sessionStorage support
 * Cookie support
 * AES encryption support
+* Quota support (4k for cookies and 5mb for HTML5 mechanisms)
 
 ## OPTIONS:
 * appID:       Unique application identifier
