@@ -115,9 +115,9 @@
    */
   var _l = function(type) {
    var lim = (type == 'localStorage' || type == 'sessionStorage') ? 1024 * 1025 * 5 : 1024 * 4;
-   if (lim - unescape(encodeURIComponent(JSON.stringify(type))).length < 0) {
-	console.log('It seems the maximum quota has been met using '+type);
-	return false;
+   if (lim - unescape(encodeURIComponent(JSON.stringify(type))).length <= 0) {
+    console.log('It seems the maximum quota has been met using '+type);
+    return false;
    }
    return true;
   }
@@ -131,7 +131,7 @@
    var x = false;
    type = (vStore(type)) ? type : 'cookie';
    if (_l(type)) {
-	switch(type) {
+    switch(type) {
      case 'localStorage':
       x = sL(k, v);
       break;
@@ -236,8 +236,7 @@
    *           as JSON object
    */
   var _e = function(o) {
-   return (gI(o.storage, o.appID)) ?
-    JSON.parse(gI(o.storage, o.appID)) : false;
+   return (gI(o.storage, o.appID)) ? JSON.parse(gI(o.storage, o.appID)) : false;
   }
 
   /**
@@ -249,12 +248,8 @@
    var ret={}, x;
    if (typeof o.data[o.appID][o.form]==='object'){
     $.each($('#'+o.form+' > :input'), function(k, v){
-     if ((vStr(v.name)!==false)&&
-         (vStr(o.data[o.appID][o.form][v.name])!==false)){
-      ret[v.name] = ((o.aes)&&(o.data[o.appID][o.form]['uuid'])&&(x!==false)) ?
-       GibberishAES.dec(o.data[o.appID][o.form][v.name],
-                        __strIV(o.data[o.appID][o.form]['uuid'])) :
-       o.data[o.appID][o.form][v.name];
+     if ((vStr(v.name)!==false)&&(vStr(o.data[o.appID][o.form][v.name])!==false)){
+      ret[v.name] = ((o.aes)&&(o.data[o.appID][o.form]['uuid'])&&(x!==false)) ? GibberishAES.dec(o.data[o.appID][o.form][v.name], __strIV(o.data[o.appID][o.form]['uuid'])) : o.data[o.appID][o.form][v.name];
      }
     });
    }
@@ -268,10 +263,7 @@
   var sF = function(o, arg){
    if (sChk(arg)>0){
     $.each(arg, function(a, b){
-     if (($('#'+o.form+' > input[name='+a+']').attr('name')===a)||
-         ($('#'+o.form+' > select[name='+a+']').attr('name')===a)||
-         ($('#'+o.form+' > textarea[name='+a+']').attr('name')===a)&&
-         (vStr(b)!==false)){
+     if (($('#'+o.form+' > input[name='+a+']').attr('name')===a)||($('#'+o.form+' > select[name='+a+']').attr('name')===a)||($('#'+o.form+' > textarea[name='+a+']').attr('name')===a)&&(vStr(b)!==false)){
       $('#'+o.form+' > input[name='+a+'], #'+o.form+' > select[name='+a+'], #'+o.form+' > textarea[name='+a+']').val(b);
      }
     });
@@ -288,8 +280,7 @@
    x[o.form]['uuid'] = ((o.aes)&&(!o.uuid)) ? hK(o) : o.uuid;
    $.each($('#'+o.form+' > :input'), function(k, v){
     if ((vStr(v.value)!==false)&&(vStr(v.name)!==false)){
-     x[o.form][v.name] = ((o.aes)&&(x[o.form]['uuid'])) ?
-      GibberishAES.enc(v.value, __strIV(x[o.form]['uuid'])) : v.value;
+     x[o.form][v.name] = ((o.aes)&&(x[o.form]['uuid'])) ? GibberishAES.enc(v.value, __strIV(x[o.form]['uuid'])) : v.value;
     }
    });
    o.data[o.appID] = (sChk(o.data[o.appID])>0) ?
@@ -307,8 +298,7 @@
    */
   var vStr = function(string){
    if (string){
-    return ((string===false)||(string.length===0)||(!string)||(string===null)||
-            (string==='')||(typeof string==='undefined')) ? false : true;
+    return ((string===false)||(string.length===0)||(!string)||(string===null)||(string==='')||(typeof string==='undefined')) ? false : true;
    } else {
     return false;
    }
@@ -335,15 +325,13 @@
    var ret = true;
    if (opts.aes){
     if (!$.isFunction(GibberishAES.enc)){
-     console.log('AES use specified but required libraries not available.'+
-                 'Please include the Gibberish-AES libs...');
+     console.log('AES use specified but required libraries not available. Please include the Gibberish-AES libs...');
      ret = false;
     }
    }
    if (opts.storage==='cookie'){
     if (!$.isFunction($.cookie)){
-     console.log('Cookie use specified but required libraries not available.'+
-                 'Please include the jQuery cookie plugin...');
+     console.log('Cookie use specified but required libraries not available. Please include the jQuery cookie plugin...');
      ret = false;
     }
    }
