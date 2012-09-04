@@ -248,8 +248,15 @@
    var ret={}, x;
    if (typeof o.data[o.appID][o.form]==='object'){
     $.each($('#'+o.form+' > :input'), function(k, v){
-     if ((vStr(v.name)!==false)&&(vStr(o.data[o.appID][o.form][v.name])!==false)){
-      ret[v.name] = ((o.aes)&&(o.data[o.appID][o.form]['uuid'])&&(x!==false)) ? GibberishAES.dec(o.data[o.appID][o.form][v.name], __strIV(o.data[o.appID][o.form]['uuid'])) : o.data[o.appID][o.form][v.name];
+     if (typeof o.data[o.appID][o.form][v.name]=='object'){
+      ret[v.name]=[];
+      $.each(o.data[o.appID][o.form][v.name], function(a, b){
+       ret[v.name][a] = ((o.aes)&&(o.data[o.appID][o.form]['uuid'])&&(x!==false)) ? GibberishAES.dec(b, __strIV(o.data[o.appID][o.form]['uuid'])) : b;
+      });
+     } else {
+      if ((vStr(v.name)!==false)&&(vStr(o.data[o.appID][o.form][v.name])!==false)){
+       ret[v.name] = ((o.aes)&&(o.data[o.appID][o.form]['uuid'])&&(x!==false)) ? GibberishAES.dec(o.data[o.appID][o.form][v.name], __strIV(o.data[o.appID][o.form]['uuid'])) : o.data[o.appID][o.form][v.name];
+      }
      }
     });
    }
@@ -309,7 +316,7 @@
     return ((o.aes)&&(key)) ? GibberishAES.enc(this.value, __strIV(key)) : this.value;
    }).get();
   }
-  
+
   /**
    * @function vStr
    * @abstract Verifies string integrity
