@@ -191,12 +191,16 @@ readability. Multiple forms can be stored within one object as shown here.
         "uuid": "cb76ax8d-6539-4151-a70d-ed0628c083d5",
         "name": "jason gerfen",
         "email": "jason.gerfen@gmail.com",
+        "radio": ["value-1", "value-2"],
+        "checkbox: ["value-1", "value-2"],
         "message": "Test #1"
     },
     "default-aes": {
         "uuid": "cb76ax8d-6539-4151-a70d-ed0628c083d5",
         "name": "U2FsdGVkX1+J6IKgOD4E/Ni/VqnNf/FwZwaHotk4Gfc=",
         "email": "U2FsdGVkX19xzInZdszNewMDlKOVZzDraUkhT2VCjtIfqgaZNYhzkKWUciUn0lCc",
+        "radio": ["U2FsdGVkX18tPmXsaED8iHHYQ601mqW9z2pDaSBlGKw=", "U2FsdGVkX18tPmXsaED8iHHYQ601mqW9z2pDaSBlGKw="],
+        "checkbox: ["U2FsdGVkX18tPmXsaED8iHHYQ601mqW9z2pDaSBlGKw=", "U2FsdGVkX18tPmXsaED8iHHYQ601mqW9z2pDaSBlGKw="],
         "message": "U2FsdGVkX1+s0SczDn9TOP9FSpBvJCqVpbL9wyniQcs="
     }
 }
@@ -212,6 +216,8 @@ mechanism.
         "uuid": "cb76ax8d-6539-4151-a70d-ed0628c083d5",
         "name": "jason gerfen",
         "email": "jason.gerfen@gmail.com",
+        "radio": ["value-1", "value-2"],
+        "checkbox: ["value-1", "value-2"],
         "message": "Test #1"
     }
 }
@@ -220,6 +226,8 @@ mechanism.
         "uuid": "cb76ax8d-6539-4151-a70d-ed0628c083d5",
         "name": "U2FsdGVkX1+J6IKgOD4E/Ni/VqnNf/FwZwaHotk4Gfc=",
         "email": "U2FsdGVkX19xzInZdszNewMDlKOVZzDraUkhT2VCjtIfqgaZNYhzkKWUciUn0lCc",
+        "radio": ["U2FsdGVkX18tPmXsaED8iHHYQ601mqW9z2pDaSBlGKw=", "U2FsdGVkX18tPmXsaED8iHHYQ601mqW9z2pDaSBlGKw="],
+        "checkbox: ["U2FsdGVkX18tPmXsaED8iHHYQ601mqW9z2pDaSBlGKw=", "U2FsdGVkX18tPmXsaED8iHHYQ601mqW9z2pDaSBlGKw="],
         "message": "U2FsdGVkX1+s0SczDn9TOP9FSpBvJCqVpbL9wyniQcs="
     }
 }
