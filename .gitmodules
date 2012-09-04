@@ -1,0 +1,6 @@
+[submodule "jquery-cookie"]
+	path = jquery-cookie
+	url = https://github.com/carhartl/jquery-cookie.git
+[submodule "gibberish-aes"]
+	path = gibberish-aes
+	url = https://github.com/mdp/gibberish-aes.git
