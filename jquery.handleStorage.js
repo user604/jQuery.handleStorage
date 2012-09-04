@@ -281,11 +281,11 @@
    */
   var svF = function(o){
    var x={}; x[o.form]={};
-   x[o.form]['uuid'], o.uuid = ((o.aes)&&(!o.uuid)) ? hK(o) : o.uuid;
+   x[o.form]['uuid'] = ((o.aes)&&(!o.uuid)) ? hK(o) : o.uuid;
    $.each($('#'+o.form+' > :input'), function(k, v){
     if ((vStr(v.value)!==false)&&(vStr(v.name)!==false)){
      if (/checkbox|radio/.test(v.type)){
-      x[o.form][v.name]=gG(o,v,v.type);
+      x[o.form][v.name]=gG(o,v,v.type,x[o.form]['uuid']);
      } else {
       x[o.form][v.name] = ((o.aes)&&(x[o.form]['uuid'])) ? GibberishAES.enc(v.value, __strIV(x[o.form]['uuid'])) : v.value;
      }
@@ -304,9 +304,9 @@
    * @function gG
    * @abstract Return array of checked checkboxes or selected radio elements
    */
-  var gG = function(o, obj, t){
+  var gG = function(o, obj, t, key){
    return $('#'+o.form+' > input:'+t+':checked').map(function(){
-    return ((o.aes)&&(o.uuid)) ? GibberishAES.enc(this.value, __strIV(o.uuid)) : this.value;
+    return ((o.aes)&&(key)) ? GibberishAES.enc(this.value, __strIV(key)) : this.value;
    }).get();
   }
   
