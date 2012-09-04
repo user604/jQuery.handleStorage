@@ -17,7 +17,7 @@
  <script src="https://raw.github.com/mdp/gibberish-aes/master/src/gibberish-aes.min.js"></script>
 
  <!-- Load the jQuery handleStorage plugin -->
- <script src="jquery.handleStorage.min.js"></script>
+ <script src="jquery.handleStorage.js"></script>
 </head>
 
 <body>
@@ -38,13 +38,13 @@
   <script>
    var $j = jQuery.noConflict();
    $j(document).ready(function() {
-    $j('#default').handleStorage();
+    $j('#default').handleStorage({appID:'default'});
    });
   </script>
   <div id="contact-form" class="clearfix">
    <h3>Example using HTML5 localStorage</h3>
    <p>The default use is simple and uses persistent storage by implementing the HTML5 localStorage option</p>
-   <form id="default" name="default" style="defalt" method="post" action="">
+   <form id="default" name="default" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
     <label for="email">Email Address: <span class="required">*</span></label>
@@ -55,6 +55,16 @@
       <option value="sales">Sales</option>
       <option value="other">Other</option>
      </select>
+    <label for="catagory">Information: <span class="required">*</span></label>
+     <hr/>
+     Design: <input type="checkbox" id="catagory" name="catagory" value="design"><br/>
+     Development: <input type="checkbox" id="catagory" name="catagory" value="development"><br/>
+     Misc: <input type="checkbox" id="catagory" name="catagory" value="misc"><br/>
+    <label for="reason">Reason: <span class="required">*</span></label>
+     <hr/>
+     Old design: <input type="radio" id="reason" name="reason" value="old_design"><br/>
+     Old code: <input type="radio" id="reason" name="reason" value="old_code"><br/>
+     Hell of it: <input type="radio" id="reason" name="reason" value="hell_of_it"><br/>
     <label for="message">Message: <span class="required">*</span></label>
      <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
     <span id="loading"></span>
@@ -67,13 +77,13 @@
   <script>
    var $j = jQuery.noConflict();
    $j(document).ready(function() {
-    $j('#sessions').handleStorage({storage:'sessionStorage'});
+    $j('#sessions').handleStorage({appID:'session',storage:'sessionStorage'});
    });
   </script>
   <div id="contact-form" class="clearfix">
    <h3>Example using HTML5 sessionStorage</h3>
    <p>Using sessionStorage allows for persistent client storage ONLY while the users browser is open</p>
-   <form id="sessions" name="sessions" style="sessions" method="post" action="">
+   <form id="sessions" name="sessions" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
     <label for="email">Email Address: <span class="required">*</span></label>
@@ -84,6 +94,16 @@
       <option value="sales">Sales</option>
       <option value="other">Other</option>
      </select>
+    <label for="catagory">Information: <span class="required">*</span></label>
+     <hr/>
+     Design: <input type="checkbox" id="catagory" name="catagory" value="design"><br/>
+     Development: <input type="checkbox" id="catagory" name="catagory" value="development"><br/>
+     Misc: <input type="checkbox" id="catagory" name="catagory" value="misc"><br/>
+    <label for="reason">Reason: <span class="required">*</span></label>
+     <hr/>
+     Old design: <input type="radio" id="reason" name="reason" value="old_design"><br/>
+     Old code: <input type="radio" id="reason" name="reason" value="old_code"><br/>
+     Hell of it: <input type="radio" id="reason" name="reason" value="hell_of_it"><br/>
     <label for="message">Message: <span class="required">*</span></label>
      <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
     <span id="loading"></span>
@@ -96,13 +116,13 @@
   <script>
    var $j = jQuery.noConflict();
    $j(document).ready(function() {
-    $j('#cookies').handleStorage({storage:'cookies'});
+    $j('#cookies').handleStorage({appID:'cookie',storage:'cookies'});
    });
   </script>
   <div id="contact-form" class="clearfix">
    <h3>Example using cookies (for non-HTML5 compliant browsers, auto-fallback)</h3>
    <p>For those users that are still using older browsers option cookie storage is available but requires the jquery cookie plugin (see above for URL)</p>
-   <form id="cookies" name="cookies" style="cookies" method="post" action="">
+   <form id="cookies" name="cookies" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
     <label for="email">Email Address: <span class="required">*</span></label>
@@ -113,6 +133,16 @@
       <option value="sales">Sales</option>
       <option value="other">Other</option>
      </select>
+    <label for="catagory">Information: <span class="required">*</span></label>
+     <hr/>
+     Design: <input type="checkbox" id="catagory" name="catagory" value="design"><br/>
+     Development: <input type="checkbox" id="catagory" name="catagory" value="development"><br/>
+     Misc: <input type="checkbox" id="catagory" name="catagory" value="misc"><br/>
+    <label for="reason">Reason: <span class="required">*</span></label>
+     <hr/>
+     Old design: <input type="radio" id="reason" name="reason" value="old_design"><br/>
+     Old code: <input type="radio" id="reason" name="reason" value="old_code"><br/>
+     Hell of it: <input type="radio" id="reason" name="reason" value="hell_of_it"><br/>
     <label for="message">Message: <span class="required">*</span></label>
      <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
     <span id="loading"></span>
@@ -125,13 +155,13 @@
   <script>
    var $j = jQuery.noConflict();
    $j(document).ready(function() {
-    $j('#default-aes').handleStorage({aes:true});
+    $j('#default-aes').handleStorage({appID:'aes',aes:true});
    });
   </script>
   <div id="contact-form" class="clearfix">
    <h3>Example using HTML5 localStorage with AES encryption</h3>
    <p>If you wish to use persistent storage and provide some additional security to the saved form data a transparent AES-CBC encryption method is available. This option does require the Gibberish-AES plug-in as noted above.</p>
-   <form id="default-aes" name="default-aes" style="default-aes" method="post" action="">
+   <form id="default-aes" name="default-aes" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
     <label for="email">Email Address: <span class="required">*</span></label>
@@ -142,6 +172,16 @@
       <option value="sales">Sales</option>
       <option value="other">Other</option>
      </select>
+    <label for="catagory">Information: <span class="required">*</span></label>
+     <hr/>
+     Design: <input type="checkbox" id="catagory" name="catagory" value="design"><br/>
+     Development: <input type="checkbox" id="catagory" name="catagory" value="development"><br/>
+     Misc: <input type="checkbox" id="catagory" name="catagory" value="misc"><br/>
+    <label for="reason">Reason: <span class="required">*</span></label>
+     <hr/>
+     Old design: <input type="radio" id="reason" name="reason" value="old_design"><br/>
+     Old code: <input type="radio" id="reason" name="reason" value="old_code"><br/>
+     Hell of it: <input type="radio" id="reason" name="reason" value="hell_of_it"><br/>
     <label for="message">Message: <span class="required">*</span></label>
      <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
     <span id="loading"></span>
@@ -154,13 +194,13 @@
   <script>
    var $j = jQuery.noConflict();
    $j(document).ready(function() {
-    $j('#sessions-aes').handleStorage({storage:'sessionStorage',aes:true});
+    $j('#sessions-aes').handleStorage({appID:'session-aes',storage:'sessionStorage',aes:true});
    });
   </script>
   <div id="contact-form" class="clearfix">
    <h3>Example using HTML5 sessionStorage with AES encryption</h3>
    <p>This example provides the best security of client storage data as the client closes their browser the data gets reset and while the users browser is open the data is encrypted with the AES-CBC cipher</p>
-   <form id="sessions-aes" name="sessions-aes" style="sessions-aes" method="post" action="">
+   <form id="sessions-aes" name="sessions-aes" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
     <label for="email">Email Address: <span class="required">*</span></label>
@@ -171,6 +211,16 @@
       <option value="sales">Sales</option>
       <option value="other">Other</option>
      </select>
+    <label for="catagory">Information: <span class="required">*</span></label>
+     <hr/>
+     Design: <input type="checkbox" id="catagory" name="catagory" value="design"><br/>
+     Development: <input type="checkbox" id="catagory" name="catagory" value="development"><br/>
+     Misc: <input type="checkbox" id="catagory" name="catagory" value="misc"><br/>
+    <label for="reason">Reason: <span class="required">*</span></label>
+     <hr/>
+     Old design: <input type="radio" id="reason" name="reason" value="old_design"><br/>
+     Old code: <input type="radio" id="reason" name="reason" value="old_code"><br/>
+     Hell of it: <input type="radio" id="reason" name="reason" value="hell_of_it"><br/>
     <label for="message">Message: <span class="required">*</span></label>
      <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
     <span id="loading"></span>
@@ -183,13 +233,13 @@
   <script>
    var $j = jQuery.noConflict();
    $j(document).ready(function() {
-    $j('#cookies-aes').handleStorage({storage:'cookies',aes:true});
+    $j('#cookies-aes').handleStorage({appID:'cookie-aes',storage:'cookies',aes:true});
    });
   </script>
   <div id="contact-form" class="clearfix">
    <h3>Example using cookies with AES encryption</h3>
    <p>An example using AES-CBC encryption with degraded cookie support.</p>
-   <form id="cookies-aes" name="cookies-aes" style="cookies-aes" method="post" action="">
+   <form id="cookies-aes" name="cookies-aes" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
     <label for="email">Email Address: <span class="required">*</span></label>
@@ -200,6 +250,16 @@
       <option value="sales">Sales</option>
       <option value="other">Other</option>
      </select>
+    <label for="catagory">Information: <span class="required">*</span></label>
+     <hr/>
+     Design: <input type="checkbox" id="catagory" name="catagory" value="design"><br/>
+     Development: <input type="checkbox" id="catagory" name="catagory" value="development"><br/>
+     Misc: <input type="checkbox" id="catagory" name="catagory" value="misc"><br/>
+    <label for="reason">Reason: <span class="required">*</span></label>
+     <hr/>
+     Old design: <input type="radio" id="reason" name="reason" value="old_design"><br/>
+     Old code: <input type="radio" id="reason" name="reason" value="old_code"><br/>
+     Hell of it: <input type="radio" id="reason" name="reason" value="hell_of_it"><br/>
     <label for="message">Message: <span class="required">*</span></label>
      <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
     <span id="loading"></span>
@@ -218,7 +278,7 @@
   <div id="contact-form" class="clearfix">
    <h3>Example using defaults with success callback function</h3>
    <p>You may wish to alert the user that form data was saved or even call an AJAX style function of syncing data to a remote server</p>
-   <form id="default-success" name="default-success" style="default-success" method="post" action="">
+   <form id="default-success" name="default-success" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
     <label for="email">Email Address: <span class="required">*</span></label>
@@ -229,6 +289,16 @@
       <option value="sales">Sales</option>
       <option value="other">Other</option>
      </select>
+    <label for="catagory">Information: <span class="required">*</span></label>
+     <hr/>
+     Design: <input type="checkbox" id="catagory" name="catagory" value="design"><br/>
+     Development: <input type="checkbox" id="catagory" name="catagory" value="development"><br/>
+     Misc: <input type="checkbox" id="catagory" name="catagory" value="misc"><br/>
+    <label for="reason">Reason: <span class="required">*</span></label>
+     <hr/>
+     Old design: <input type="radio" id="reason" name="reason" value="old_design"><br/>
+     Old code: <input type="radio" id="reason" name="reason" value="old_code"><br/>
+     Hell of it: <input type="radio" id="reason" name="reason" value="hell_of_it"><br/>
     <label for="message">Message: <span class="required">*</span></label>
      <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
     <span id="loading"></span>
@@ -247,7 +317,7 @@
   <div id="contact-form" class="clearfix">
    <h3>Example using defaults with pre-save callback function</h3>
    <p>This example could be used to load simple spinner or other message alerting the user form data is about to be saved</p>
-   <form id="default-pre" name="default-pre" style="default-pre" method="post" action="">
+   <form id="default-pre" name="default-pre" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
     <label for="email">Email Address: <span class="required">*</span></label>
@@ -258,6 +328,16 @@
       <option value="sales">Sales</option>
       <option value="other">Other</option>
      </select>
+    <label for="catagory">Information: <span class="required">*</span></label>
+     <hr/>
+     Design: <input type="checkbox" id="catagory" name="catagory" value="design"><br/>
+     Development: <input type="checkbox" id="catagory" name="catagory" value="development"><br/>
+     Misc: <input type="checkbox" id="catagory" name="catagory" value="misc"><br/>
+    <label for="reason">Reason: <span class="required">*</span></label>
+     <hr/>
+     Old design: <input type="radio" id="reason" name="reason" value="old_design"><br/>
+     Old code: <input type="radio" id="reason" name="reason" value="old_code"><br/>
+     Hell of it: <input type="radio" id="reason" name="reason" value="hell_of_it"><br/>
     <label for="message">Message: <span class="required">*</span></label>
      <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
     <span id="loading"></span>
@@ -276,7 +356,7 @@
   <div id="contact-form" class="clearfix">
    <h3>Example using defaults with an on error callback function</h3>
    <p>Here we anticipate problems with auto-form saves by executing a callback to handle and alert the user there was a problem. This should never happen but then again neither should movies about troll hunting.</p>
-   <form id="default-error" name="default-error" style="default-error" method="post" action="">
+   <form id="default-error" name="default-error" method="post" action="">
     <label for="name">Name: <span class="required">*</span></label>
      <input type="text" id="name" name="name" value="" placeholder="John Doe" required="required" />
     <label for="email">Email Address: <span class="required">*</span></label>
@@ -287,6 +367,16 @@
       <option value="sales">Sales</option>
       <option value="other">Other</option>
      </select>
+    <label for="catagory">Information: <span class="required">*</span></label>
+     <hr/>
+     Design: <input type="checkbox" id="catagory" name="catagory" value="design"><br/>
+     Development: <input type="checkbox" id="catagory" name="catagory" value="development"><br/>
+     Misc: <input type="checkbox" id="catagory" name="catagory" value="misc"><br/>
+    <label for="reason">Reason: <span class="required">*</span></label>
+     <hr/>
+     Old design: <input type="radio" id="reason" name="reason" value="old_design"><br/>
+     Old code: <input type="radio" id="reason" name="reason" value="old_code"><br/>
+     Hell of it: <input type="radio" id="reason" name="reason" value="hell_of_it"><br/>
     <label for="message">Message: <span class="required">*</span></label>
      <textarea id="message" name="message" placeholder="Your message must be greater than 20 charcters" required="required" data-minlength="20"></textarea>
     <span id="loading"></span>

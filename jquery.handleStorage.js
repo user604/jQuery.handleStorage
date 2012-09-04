@@ -54,7 +54,7 @@
    storage:     'localStorage',          // Storage type localStorage || sessionStorage || cookie (cookie storage requires jQuery cookie plugin)
    interval:    5000,                    // Amount of time between auto-saves (default is 5sec)
    aes:         false,                   // Use AES encryption? (true or false)
-   uuid:        '',                      // Random RFC-4122 string used as AES password
+   uuid:        '',                      // Random RFC-4122 string
    form:        '',                      // Place holder for form ID
    data:        {},                      // Place holder for storage objects
    callback:    function(){},            // An on save callback
@@ -84,7 +84,7 @@
       sF(opts, orig);
      }
      ((opts.preCallback)&&($.isFunction(opts.preCallback))) ? opts.preCallback($(this)) : false;
-     $('#'+opts.form).delegate('input, input:radio:selected, input:checkbox:checked, textarea', 'change keyup blur submit', function(){
+     $('#'+opts.form).delegate('input, input:radio:selected, input:checkbox:checked, select, textarea', 'change keyup blur submit', function(){
       svF(opts);
      });
      setInterval(function(){svF(opts);}, opts.interval);
@@ -114,9 +114,9 @@
    *           Uses 5mb for HTML5 local/session storage & 4k for cookies
    */
   var _l = function(type) {
-   var lim = (type == 'localStorage' || type == 'sessionStorage') ? 1024 * 1025 * 5 : 1024 * 4;
+   var lim = /local|session/.test(type) ? 1024 * 1025 * 5 : 1024 * 4;
    if (lim - unescape(encodeURIComponent(JSON.stringify(type))).length <= 0) {
-    console.log('It seems the maximum quota has been met using '+type);
+    console.log('Maximum quota has been met using '+type);
     return false;
    }
    return true;
@@ -264,7 +264,11 @@
    if (sChk(arg)>0){
     $.each(arg, function(a, b){
      if (($('#'+o.form+' > input[name='+a+']').attr('name')===a)||($('#'+o.form+' > select[name='+a+']').attr('name')===a)||($('#'+o.form+' > textarea[name='+a+']').attr('name')===a)&&(vStr(b)!==false)){
-      $('#'+o.form+' > input[name='+a+'], #'+o.form+' > select[name='+a+'], #'+o.form+' > textarea[name='+a+']').val(b);
+      if ((/checkbox|radio/.test($('#'+o.form+' > input[name='+a+']').attr('type')))&&($('#'+o.form+' > input[name='+a+']').attr('value')==b)) {
+       $('#'+o.form+' > input[name='+a+']').attr('checked', true);
+      } else {
+       $('#'+o.form+' > input[name='+a+'], #'+o.form+' > select[name='+a+'], #'+o.form+' > textarea[name='+a+']').val(b);
+      }
      }
     });
    }
@@ -277,10 +281,14 @@
    */
   var svF = function(o){
    var x={}; x[o.form]={};
-   x[o.form]['uuid'] = ((o.aes)&&(!o.uuid)) ? hK(o) : o.uuid;
+   x[o.form]['uuid'], o.uuid = ((o.aes)&&(!o.uuid)) ? hK(o) : o.uuid;
    $.each($('#'+o.form+' > :input'), function(k, v){
     if ((vStr(v.value)!==false)&&(vStr(v.name)!==false)){
-     x[o.form][v.name] = ((o.aes)&&(x[o.form]['uuid'])) ? GibberishAES.enc(v.value, __strIV(x[o.form]['uuid'])) : v.value;
+     if (/checkbox|radio/.test(v.type)){
+      x[o.form][v.name]=gG(o,v,v.type);
+     } else {
+      x[o.form][v.name] = ((o.aes)&&(x[o.form]['uuid'])) ? GibberishAES.enc(v.value, __strIV(x[o.form]['uuid'])) : v.value;
+     }
     }
    });
    o.data[o.appID] = (sChk(o.data[o.appID])>0) ?
@@ -292,6 +300,16 @@
    }
   }
 
+  /**
+   * @function gG
+   * @abstract Return array of checked checkboxes or selected radio elements
+   */
+  var gG = function(o, obj, t){
+   return $('#'+o.form+' > input:'+t+':checked').map(function(){
+    return ((o.aes)&&(o.uuid)) ? GibberishAES.enc(this.value, __strIV(o.uuid)) : this.value;
+   }).get();
+  }
+  
   /**
    * @function vStr
    * @abstract Verifies string integrity
@@ -313,6 +331,7 @@
    try {
     return ((type in window)&&(window[type])) ? true : false;
    } catch (e) {
+    console.log('The '+type+' storage mechanism does not exist, please upgrade your browser');
     return false;
    }
   }
